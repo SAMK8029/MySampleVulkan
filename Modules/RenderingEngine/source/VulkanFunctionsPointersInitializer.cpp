@@ -53,6 +53,8 @@ bool initializeVulkanFunctionsPointer()
 
 #endif
 
+
+
     return true;
 }
 
