@@ -8,7 +8,11 @@ namespace RenderingEngine
 
 /**************Global Level Functions**************/
 
-extern PFN_vkCreateInstance vkCreateInstance;
+extern PFN_vkCreateInstance                       vkCreateInstance;
+extern PFN_vkEnumerateInstanceLayerProperties     vkEnumerateInstanceLayerProperties;
+extern PFN_vkEnumerateInstanceExtensionProperties vkEnumerateInstanceExtensionProperties;
+
+/**************************************************/
 
 }
 

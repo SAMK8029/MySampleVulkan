@@ -1,12 +1,22 @@
-#include <VulkanFunctionsPointersInitializer.h>
 #include <vulkan/vulkan.h>
-#include <iostream>
+#include <VulkanFunctionsPointersInitializer.h>
+#include <VulkanComponentFactory.h>
 #include <ErrorCodes.h>
+#include <iostream>
+#include <vector>
 
 namespace RenderingEngine
 {
 
+#ifndef NDEBUG  // if Debug
+static const std::vector<const char*> VALIDATION_NAMES {"VK_LAYER_KHRONOS_validation"};
+#endif
+
+static const std::vector<const char*> INSTANCE_EXTENSIONS_NAMES_WHICH_ARE_NOT_RELATED_TO_LAYERS;
+
+
 static PFN_vkGetInstanceProcAddr vkGetInstanceProcAddr;
+
 
 /*******Global Level*******/
 
@@ -16,13 +26,7 @@ static PFN_vkEnumerateInstanceExtensionProperties vkEnumerateInstanceExtensionPr
 
 /*********************/
 
-template<typename T>
-bool checkLoadedLibrary(T library , const std::string& libraryName);
-
-template<typename T>
-bool checkLoadedFunction(T functionPointer , const std::string& functionName , const std::string& functionLevel);
-
-bool initializeGlobalLevelVulkanFuncitons()
+bool VulkanFunctionsPointersInitializer::initializeGlobalLevelVulkanFuncitons()
 {
     vkCreateInstance = reinterpret_cast<PFN_vkCreateInstance>(vkGetInstanceProcAddr(nullptr , "vkCreateInstance"));
     vkEnumerateInstanceLayerProperties = reinterpret_cast<PFN_vkEnumerateInstanceLayerProperties>(vkGetInstanceProcAddr(nullptr , "vkEnumerateInstanceLayerProperties"));
@@ -31,13 +35,13 @@ bool initializeGlobalLevelVulkanFuncitons()
     bool result = false;
 
     result = checkLoadedFunction(vkCreateInstance , "vkCreateInstance" , "Global Level");
-    result = checkLoadedFunction(vkEnumerateInstanceLayerProperties , "vkEnumerateInstanceLayerProperties" , "Global Level");
-    result = checkLoadedFunction(vkEnumerateInstanceExtensionProperties , "vkEnumerateInstanceExtensionProperties" , "Global Level");
+    result = checkLoadedFunction(vkEnumerateInstanceLayerProperties , "vkEnumerateInstanceLayerProperties" , "Global Level") && result;
+    result = checkLoadedFunction(vkEnumerateInstanceExtensionProperties , "vkEnumerateInstanceExtensionProperties" , "Global Level") && result;
 
     return result;
 }
 
-bool initializeVulkanFunctionsPointer()
+bool VulkanFunctionsPointersInitializer::initializeVulkanFunctionsPointer()
 {
 #ifdef Win32
 
@@ -53,7 +57,11 @@ bool initializeVulkanFunctionsPointer()
 
 #endif
 
+    initializeGlobalLevelVulkanFuncitons();
 
+    VkInstance vulkanInstance = VK_NULL_HANDLE;
+
+    vulkanInstance = VulkanComponentFactory::getInstance().createVulkanInstance();
 
     return true;
 }

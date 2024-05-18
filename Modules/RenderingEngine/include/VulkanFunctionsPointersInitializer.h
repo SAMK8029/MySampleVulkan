@@ -7,17 +7,33 @@
 #include <dlfcn.h>
 #endif
 
+#include <string>
 
 namespace RenderingEngine
 {
 
+class VulkanFunctionsPointersInitializer
+{
+public:
+    bool initializeVulkanFunctionsPointer();
+
+private:
+    bool initializeGlobalLevelVulkanFuncitons();
+
+    template<typename T>
+    bool checkLoadedLibrary(T library , const std::string& libraryName);
+
+    template<typename T>
+    bool checkLoadedFunction(T functionPointer , const std::string& functionName , const std::string& functionLevel);
+
 #ifdef WIN32
-static HMODULE vulkanLoader = nullptr;
+    HMODULE vulkanLoader = nullptr;
 #elif defined Unix
-static void* vulkanLoader = nullptr;
+    static void* vulkanLoader = nullptr;
 #endif
 
-bool initializeVulkanFunctionsPointer();
+
+};
 
 } // RenderingEngine
 
