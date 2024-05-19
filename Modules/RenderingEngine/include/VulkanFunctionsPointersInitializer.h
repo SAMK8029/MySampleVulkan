@@ -14,7 +14,12 @@ namespace RenderingEngine
 
 class VulkanFunctionsPointersInitializer
 {
+    VulkanFunctionsPointersInitializer();
+    ~VulkanFunctionsPointersInitializer();
+
 public:
+    static VulkanFunctionsPointersInitializer& getInstance();
+
     bool initializeVulkanFunctionsPointer();
 
 private:

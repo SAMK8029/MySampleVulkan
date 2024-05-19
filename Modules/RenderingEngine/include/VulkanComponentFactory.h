@@ -15,9 +15,11 @@ class VulkanComponentFactory
 public:
     static VulkanComponentFactory &getInstance();
 
-    VkInstance createVulkanInstance(const std::vector<const char *> &extensionsNames , uint32_t extensionsCount , const std::vector<const char *> &desiredLayersNames = nullptr , uint32_t layersCount = 0);
+    VkInstance createVulkanInstance(const std::vector<const char *> &desiredExtensionsNames = std::vector<const char *>(0) , const std::vector<const char *>& desiredLayersNames = std::vector<const char *>(0));
     VkPhysicalDevice getSelectedGpu();
     VkDevice createVulkanLogicalDevice();
+
+    VkInstance _vulkanInstance;
 };
 
 } // RenderingEngine

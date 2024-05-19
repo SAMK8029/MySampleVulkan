@@ -19,3 +19,8 @@ add_executable(${APPLICATION_EXE} main.cpp)
 
 add_subdirectory(Modules/RenderingEngine)
 
+if(WIN32)
+    add_definitions(-DWin32)
+elseif(UNIX)
+    add_definitions(-DUnix)
+endif()

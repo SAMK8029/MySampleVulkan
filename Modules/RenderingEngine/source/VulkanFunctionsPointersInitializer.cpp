@@ -20,9 +20,9 @@ static PFN_vkGetInstanceProcAddr vkGetInstanceProcAddr;
 
 /*******Global Level*******/
 
-static PFN_vkCreateInstance                       vkCreateInstance                      ;
-static PFN_vkEnumerateInstanceLayerProperties     vkEnumerateInstanceLayerProperties    ;
-static PFN_vkEnumerateInstanceExtensionProperties vkEnumerateInstanceExtensionProperties;
+PFN_vkCreateInstance                       vkCreateInstance                      ;
+PFN_vkEnumerateInstanceLayerProperties     vkEnumerateInstanceLayerProperties    ;
+PFN_vkEnumerateInstanceExtensionProperties vkEnumerateInstanceExtensionProperties;
 
 /*********************/
 
@@ -39,6 +39,17 @@ bool VulkanFunctionsPointersInitializer::initializeGlobalLevelVulkanFuncitons()
     result = checkLoadedFunction(vkEnumerateInstanceExtensionProperties , "vkEnumerateInstanceExtensionProperties" , "Global Level") && result;
 
     return result;
+}
+
+VulkanFunctionsPointersInitializer::VulkanFunctionsPointersInitializer() = default;
+
+VulkanFunctionsPointersInitializer::~VulkanFunctionsPointersInitializer() = default;
+
+VulkanFunctionsPointersInitializer& VulkanFunctionsPointersInitializer::getInstance()
+{
+    static VulkanFunctionsPointersInitializer vulkanFunctionsPointersInitializer;
+
+    return vulkanFunctionsPointersInitializer;
 }
 
 bool VulkanFunctionsPointersInitializer::initializeVulkanFunctionsPointer()
@@ -61,13 +72,13 @@ bool VulkanFunctionsPointersInitializer::initializeVulkanFunctionsPointer()
 
     VkInstance vulkanInstance = VK_NULL_HANDLE;
 
-    vulkanInstance = VulkanComponentFactory::getInstance().createVulkanInstance();
+    vulkanInstance = VulkanComponentFactory::getInstance().createVulkanInstance(INSTANCE_EXTENSIONS_NAMES_WHICH_ARE_NOT_RELATED_TO_LAYERS , VALIDATION_NAMES);
 
     return true;
 }
 
 template<typename T>
-bool checkLoadedLibrary(T library , const std::string& libraryName)
+bool VulkanFunctionsPointersInitializer::checkLoadedLibrary(T library , const std::string& libraryName)
 {
     if(library == nullptr)
     {
@@ -85,7 +96,7 @@ bool checkLoadedLibrary(T library , const std::string& libraryName)
 
 static int number = 1;
 template<typename T>
-bool checkLoadedFunction(T functionPointer , const std::string& functionName , const std::string& functionLevel)
+bool VulkanFunctionsPointersInitializer::checkLoadedFunction(T functionPointer , const std::string& functionName , const std::string& functionLevel)
 {
     if(functionPointer == nullptr)
     {
