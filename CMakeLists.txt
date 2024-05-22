@@ -1,5 +1,7 @@
 cmake_minimum_required(VERSION 3.14)
 
+include(${CMAKE_SOURCE_DIR}/CMake/LinkToModule.cmake)
+
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
@@ -17,10 +19,17 @@ set(APPLICATION_EXE ${PROJECT_NAME})
 
 add_executable(${APPLICATION_EXE} main.cpp)
 
-add_subdirectory(Modules/RenderingEngine)
+include_directories(Modules/CommonHeaderFiles)
 
 if(WIN32)
     add_definitions(-DWin32)
+    add_definitions(-DVK_USE_PLATFORM_WIN32_KHR)
 elseif(UNIX)
     add_definitions(-DUnix)
+    add_definitions(-DVK_USE_PLATFORM_XCB_KHR)
 endif()
+
+add_definitions(-DVK_NO_PROTOTYPES)
+
+add_subdirectory(Modules/PresentationEngine)
+add_subdirectory(Modules/VulkanInitializer)

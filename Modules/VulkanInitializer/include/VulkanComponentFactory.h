@@ -14,12 +14,18 @@ class VulkanComponentFactory
 
 public:
     static VulkanComponentFactory &getInstance();
+    static VkInstance getCreatedVulkanInstance();
+    static VkDevice   getCreatedVulkanLogicalDevice();
+    static VkPhysicalDevice getSelectedGpu();
 
     VkInstance createVulkanInstance(const std::vector<const char *> &desiredExtensionsNames = std::vector<const char *>(0) , const std::vector<const char *>& desiredLayersNames = std::vector<const char *>(0));
-    VkPhysicalDevice getSelectedGpu();
-    VkDevice createVulkanLogicalDevice();
+    VkPhysicalDevice getProperGpu();
+    VkDevice createVulkanLogicalDevice(const std::vector<const char *> &desiredExtensionsNames = std::vector<const char *>(0));
 
-    VkInstance _vulkanInstance;
+private:
+    static VkInstance _vulkanInstance;
+    static VkDevice   _vulkanLogicalDevice;
+    static VkPhysicalDevice   _selectedGpu;
 };
 
 } // RenderingEngine

@@ -24,6 +24,8 @@ public:
 
 private:
     bool initializeGlobalLevelVulkanFuncitons();
+    bool initializeInstanceLevelVulkanFuncitons();
+    bool initializeDeviceLevelVulkanFuncitons();
 
     template<typename T>
     bool checkLoadedLibrary(T library , const std::string& libraryName);
@@ -36,7 +38,6 @@ private:
 #elif defined Unix
     static void* vulkanLoader = nullptr;
 #endif
-
 
 };
 
