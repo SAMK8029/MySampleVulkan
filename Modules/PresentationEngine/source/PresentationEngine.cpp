@@ -45,8 +45,8 @@ PresentationEngine:: PresentationEngine()
 
     glfwMakeContextCurrent(_window);
 }
-PresentationEngine::~PresentationEngine() = default;
 
+PresentationEngine::~PresentationEngine() = default;
 
 bool PresentationEngine::createSwapchian()
 {
@@ -130,40 +130,40 @@ bool PresentationEngine::createSwapchian()
         }
     }
 
-    VkSwapchainCreateInfoKHR SwapchainCreateInfo{};
-    SwapchainCreateInfo.sType = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR;
-    SwapchainCreateInfo.compositeAlpha = VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR;
-    SwapchainCreateInfo.surface = surface;
-    SwapchainCreateInfo.clipped = true;
-    SwapchainCreateInfo.pNext = nullptr;
-    SwapchainCreateInfo.oldSwapchain = nullptr;
-    SwapchainCreateInfo.minImageCount = desiredMinimumImage;
-    SwapchainCreateInfo.imageFormat = desiredSurfaceFormat.format;
-    SwapchainCreateInfo.imageColorSpace = desiredSurfaceFormat.colorSpace;
-    SwapchainCreateInfo.imageExtent = surfaceCapabilities.currentExtent;
-    SwapchainCreateInfo.imageArrayLayers = 1; // ?
-    SwapchainCreateInfo.imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
-    SwapchainCreateInfo.preTransform = surfaceCapabilities.currentTransform;
-    SwapchainCreateInfo.compositeAlpha = VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR;
-    SwapchainCreateInfo.presentMode = desiredPresentationMode;
+    VkSwapchainCreateInfoKHR swapchainCreateInfo{};
+    swapchainCreateInfo.sType = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR;
+    swapchainCreateInfo.compositeAlpha = VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR;
+    swapchainCreateInfo.surface = surface;
+    swapchainCreateInfo.clipped = true;
+    swapchainCreateInfo.pNext = nullptr;
+    swapchainCreateInfo.oldSwapchain = nullptr;
+    swapchainCreateInfo.minImageCount = desiredMinimumImage;
+    swapchainCreateInfo.imageFormat = desiredSurfaceFormat.format;
+    swapchainCreateInfo.imageColorSpace = desiredSurfaceFormat.colorSpace;
+    swapchainCreateInfo.imageExtent = surfaceCapabilities.currentExtent;
+    swapchainCreateInfo.imageArrayLayers = 1; // ?
+    swapchainCreateInfo.imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
+    swapchainCreateInfo.preTransform = surfaceCapabilities.currentTransform;
+    swapchainCreateInfo.compositeAlpha = VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR;
+    swapchainCreateInfo.presentMode = desiredPresentationMode;
 
     if(VulkanComponentFactory::queueFamilyIndices.presentationQueueFamilyIndex == VulkanComponentFactory::queueFamilyIndices.graphicQueueFamilyIndex)
     {
-        SwapchainCreateInfo.imageSharingMode = VK_SHARING_MODE_EXCLUSIVE; // Excusive to the queue.
-        SwapchainCreateInfo.queueFamilyIndexCount = 0;  // ~
-        SwapchainCreateInfo.pQueueFamilyIndices = nullptr;  // ~
+        swapchainCreateInfo.imageSharingMode = VK_SHARING_MODE_EXCLUSIVE; // Excusive to the queue.
+        swapchainCreateInfo.queueFamilyIndexCount = 0;  // ~
+        swapchainCreateInfo.pQueueFamilyIndices = nullptr;  // ~
     }
     else
     {
         uint32_t queueFamilyIndices[] = {static_cast<uint32_t>(VulkanComponentFactory::queueFamilyIndices.graphicQueueFamilyIndex) , static_cast<uint32_t>(VulkanComponentFactory::queueFamilyIndices.presentationQueueFamilyIndex)};
 
-        SwapchainCreateInfo.imageSharingMode = VK_SHARING_MODE_CONCURRENT;
-        SwapchainCreateInfo.queueFamilyIndexCount = 2;
-        SwapchainCreateInfo.pQueueFamilyIndices = queueFamilyIndices;
+        swapchainCreateInfo.imageSharingMode = VK_SHARING_MODE_CONCURRENT;
+        swapchainCreateInfo.queueFamilyIndexCount = 2;
+        swapchainCreateInfo.pQueueFamilyIndices = queueFamilyIndices;
     }
 
     VkSwapchainKHR swapchain = VK_NULL_HANDLE;
-    vkCreateSwapchainKHR(VulkanComponentFactory::getCreatedVulkanLogicalDevice() , &SwapchainCreateInfo , nullptr , &swapchain);
+    vkCreateSwapchainKHR(VulkanComponentFactory::getCreatedVulkanLogicalDevice() , &swapchainCreateInfo , nullptr , &swapchain);
 
     return true;
 }
