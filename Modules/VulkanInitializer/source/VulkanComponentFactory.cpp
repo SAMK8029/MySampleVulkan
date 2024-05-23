@@ -6,9 +6,10 @@
 namespace RenderingEngine
 {
 
-VkInstance       VulkanComponentFactory::_vulkanInstance      = VK_NULL_HANDLE;
-VkDevice         VulkanComponentFactory::_vulkanLogicalDevice = VK_NULL_HANDLE;
-VkPhysicalDevice VulkanComponentFactory::_selectedGpu         = VK_NULL_HANDLE;
+VkInstance         VulkanComponentFactory::_vulkanInstance      = VK_NULL_HANDLE;
+VkDevice           VulkanComponentFactory::_vulkanLogicalDevice = VK_NULL_HANDLE;
+VkPhysicalDevice   VulkanComponentFactory::_selectedGpu         = VK_NULL_HANDLE;
+QueueFamilyIndices VulkanComponentFactory::queueFamilyIndices = {-1 , -1};
 
 VulkanComponentFactory::VulkanComponentFactory() = default;
 
@@ -160,16 +161,16 @@ VkDevice VulkanComponentFactory::createVulkanLogicalDevice(const std::vector<con
     std::vector<VkQueueFamilyProperties> queueFamilyProperties(queueFamilyPropertiesCount);
     vkGetPhysicalDeviceQueueFamilyProperties(selectedGpu , &queueFamilyPropertiesCount , queueFamilyProperties.data());
 
-    int queueFamilyIndex = -1;
     for(size_t i = 0 ; i < queueFamilyProperties.size() ; i++)
     {
         if(queueFamilyProperties.size() > 0 && queueFamilyProperties.at(i).queueFlags & VK_QUEUE_GRAPHICS_BIT)
         {
-            queueFamilyIndex = i;
+            queueFamilyIndices.graphicQueueFamilyIndex = i;
+            break;
         }
     }
 
-    if(queueFamilyIndex == -1)
+    if(queueFamilyIndices.graphicQueueFamilyIndex == -1)
     {
         return VK_NULL_HANDLE;
     }
@@ -181,7 +182,7 @@ VkDevice VulkanComponentFactory::createVulkanLogicalDevice(const std::vector<con
     deviceQueueCreateInfo.pQueuePriorities = &priority;
     deviceQueueCreateInfo.sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
     deviceQueueCreateInfo.pNext = nullptr;
-    deviceQueueCreateInfo.queueFamilyIndex = queueFamilyIndex;
+    deviceQueueCreateInfo.queueFamilyIndex = queueFamilyIndices.graphicQueueFamilyIndex;
 
     VkDeviceCreateInfo logicalDeviceCreateInfo{};
     logicalDeviceCreateInfo.pQueueCreateInfos = &deviceQueueCreateInfo;

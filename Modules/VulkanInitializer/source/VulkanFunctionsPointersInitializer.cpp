@@ -12,7 +12,15 @@ namespace RenderingEngine
 static const std::vector<const char*> LAYERS_NAMES {"VK_LAYER_KHRONOS_validation"};
 #endif
 
-static const std::vector<const char*> INSTANCE_EXTENSIONS_NAMES_WHICH_ARE_NOT_RELATED_TO_LAYERS{VK_KHR_SURFACE_EXTENSION_NAME , VK_KHR_WIN32_SURFACE_EXTENSION_NAME};
+static const std::vector<const char*> INSTANCE_EXTENSIONS_NAMES_WHICH_ARE_NOT_RELATED_TO_LAYERS
+    {
+        VK_KHR_SURFACE_EXTENSION_NAME ,
+#ifdef Win32
+        VK_KHR_WIN32_SURFACE_EXTENSION_NAME
+#elif defined Unix
+        VK_KHR_XCB_SURFACE_EXTENSION_NAME
+#endif
+    };
 
 static const std::vector<const char*> DEVICE_EXTENSIONS_NAMES = {VK_KHR_SWAPCHAIN_EXTENSION_NAME};
 
@@ -36,6 +44,9 @@ PFN_vkGetDeviceProcAddr                      vkGetDeviceProcAddr;
 
 // From Extensions.
 PFN_vkGetPhysicalDeviceSurfaceCapabilitiesKHR vkGetPhysicalDeviceSurfaceCapabilitiesKHR;
+PFN_vkGetPhysicalDeviceSurfaceFormatsKHR      vkGetPhysicalDeviceSurfaceFormatsKHR;
+PFN_vkGetPhysicalDeviceSurfaceSupportKHR      vkGetPhysicalDeviceSurfaceSupportKHR;
+PFN_vkGetPhysicalDeviceSurfacePresentModesKHR vkGetPhysicalDeviceSurfacePresentModesKHR;
 
 /*******Device Level*******/
 
@@ -46,8 +57,7 @@ PFN_vkCreateSwapchainKHR vkCreateSwapchainKHR;
 
 /**************************/
 
-VulkanFunctionsPointersInitializer::VulkanFunctionsPointersInitializer() = default;
-
+VulkanFunctionsPointersInitializer:: VulkanFunctionsPointersInitializer() = default;
 VulkanFunctionsPointersInitializer::~VulkanFunctionsPointersInitializer() = default;
 
 bool VulkanFunctionsPointersInitializer::initializeGlobalLevelVulkanFuncitons()
@@ -73,6 +83,9 @@ bool VulkanFunctionsPointersInitializer::initializeInstanceLevelVulkanFuncitons(
     vkGetPhysicalDeviceQueueFamilyProperties = reinterpret_cast<PFN_vkGetPhysicalDeviceQueueFamilyProperties>(vkGetInstanceProcAddr(VulkanComponentFactory::getCreatedVulkanInstance() , "vkGetPhysicalDeviceQueueFamilyProperties"));
     vkGetDeviceProcAddr = reinterpret_cast<PFN_vkGetDeviceProcAddr>(vkGetInstanceProcAddr(VulkanComponentFactory::getCreatedVulkanInstance() , "vkGetDeviceProcAddr"));
     vkGetPhysicalDeviceSurfaceCapabilitiesKHR = reinterpret_cast<PFN_vkGetPhysicalDeviceSurfaceCapabilitiesKHR>(vkGetInstanceProcAddr(VulkanComponentFactory::getCreatedVulkanInstance() , "vkGetPhysicalDeviceSurfaceCapabilitiesKHR"));
+    vkGetPhysicalDeviceSurfaceFormatsKHR = reinterpret_cast<PFN_vkGetPhysicalDeviceSurfaceFormatsKHR>(vkGetInstanceProcAddr(VulkanComponentFactory::getCreatedVulkanInstance() , "vkGetPhysicalDeviceSurfaceFormatsKHR"));
+    vkGetPhysicalDeviceSurfaceSupportKHR = reinterpret_cast<PFN_vkGetPhysicalDeviceSurfaceSupportKHR>(vkGetInstanceProcAddr(VulkanComponentFactory::getCreatedVulkanInstance() , "vkGetPhysicalDeviceSurfaceSupportKHR"));
+    vkGetPhysicalDeviceSurfacePresentModesKHR = reinterpret_cast<PFN_vkGetPhysicalDeviceSurfacePresentModesKHR>(vkGetInstanceProcAddr(VulkanComponentFactory::getCreatedVulkanInstance() , "vkGetPhysicalDeviceSurfacePresentModesKHR"));
 
     bool result = false;
     result = checkLoadedFunction(vkEnumerateDeviceExtensionProperties , "vkEnumerateDeviceExtensionProperties" , "Instance Level");
@@ -81,6 +94,9 @@ bool VulkanFunctionsPointersInitializer::initializeInstanceLevelVulkanFuncitons(
     result = checkLoadedFunction(vkGetPhysicalDeviceQueueFamilyProperties , "vkGetPhysicalDeviceQueueFamilyProperties" , "Instance Level") && result;
     result = checkLoadedFunction(vkGetDeviceProcAddr , "vkGetDeviceProcAddr" , "Instance Level") && result;
     result = checkLoadedFunction(vkGetPhysicalDeviceSurfaceCapabilitiesKHR , "vkGetPhysicalDeviceSurfaceCapabilitiesKHR" , "Instance Level from extension") && result;
+    result = checkLoadedFunction(vkGetPhysicalDeviceSurfaceFormatsKHR , "vkGetPhysicalDeviceSurfaceFormatsKHR" , "Instance Level from extension") && result;
+    result = checkLoadedFunction(vkGetPhysicalDeviceSurfaceSupportKHR , "vkGetPhysicalDeviceSurfaceSupportKHR" , "Instance Level from extension") && result;
+    result = checkLoadedFunction(vkGetPhysicalDeviceSurfacePresentModesKHR , "vkGetPhysicalDeviceSurfacePresentModesKHR" , "Instance Level from extension") && result;
 
     return result;
 }
@@ -93,7 +109,6 @@ bool VulkanFunctionsPointersInitializer::initializeDeviceLevelVulkanFuncitons()
     result = checkLoadedFunction(vkCreateSwapchainKHR , "vkCreateSwapchainKHR" , "Device Level from extension");
 
     return result;
-
 }
 
 
