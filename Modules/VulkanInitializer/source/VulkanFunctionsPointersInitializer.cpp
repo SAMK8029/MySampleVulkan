@@ -10,6 +10,8 @@ namespace RenderingEngine
 
 #ifndef NDEBUG  // if build in Debug mode
 static const std::vector<const char*> LAYERS_NAMES {"VK_LAYER_KHRONOS_validation"};
+#else
+static const std::vector<const char*> LAYERS_NAMES{};
 #endif
 
 static const std::vector<const char*> INSTANCE_EXTENSIONS_NAMES_WHICH_ARE_NOT_RELATED_TO_LAYERS
@@ -77,11 +79,11 @@ bool VulkanFunctionsPointersInitializer::initializeGlobalLevelVulkanFuncitons()
 
 bool VulkanFunctionsPointersInitializer::initializeInstanceLevelVulkanFuncitons()
 {
-    vkEnumerateDeviceExtensionProperties = reinterpret_cast<PFN_vkEnumerateDeviceExtensionProperties>(vkGetInstanceProcAddr(VulkanComponentFactory::getInstance().getInstance().getCreatedVulkanInstance() , "vkEnumerateDeviceExtensionProperties"));
+    vkEnumerateDeviceExtensionProperties = reinterpret_cast<PFN_vkEnumerateDeviceExtensionProperties>(vkGetInstanceProcAddr(VulkanComponentFactory::getInstance().getCreatedVulkanInstance() , "vkEnumerateDeviceExtensionProperties"));
     vkEnumeratePhysicalDevices = reinterpret_cast<PFN_vkEnumeratePhysicalDevices>(vkGetInstanceProcAddr(VulkanComponentFactory::getInstance().getCreatedVulkanInstance() , "vkEnumeratePhysicalDevices"));
-    vkCreateDevice = reinterpret_cast<PFN_vkCreateDevice>(vkGetInstanceProcAddr(VulkanComponentFactory::getInstance().getInstance().getCreatedVulkanInstance() , "vkCreateDevice"));
+    vkCreateDevice = reinterpret_cast<PFN_vkCreateDevice>(vkGetInstanceProcAddr(VulkanComponentFactory::getInstance().getCreatedVulkanInstance() , "vkCreateDevice"));
     vkGetPhysicalDeviceQueueFamilyProperties = reinterpret_cast<PFN_vkGetPhysicalDeviceQueueFamilyProperties>(vkGetInstanceProcAddr(VulkanComponentFactory::getInstance().getCreatedVulkanInstance() , "vkGetPhysicalDeviceQueueFamilyProperties"));
-    vkGetDeviceProcAddr = reinterpret_cast<PFN_vkGetDeviceProcAddr>(vkGetInstanceProcAddr(VulkanComponentFactory::getInstance().getInstance().getCreatedVulkanInstance() , "vkGetDeviceProcAddr"));
+    vkGetDeviceProcAddr = reinterpret_cast<PFN_vkGetDeviceProcAddr>(vkGetInstanceProcAddr(VulkanComponentFactory::getInstance().getCreatedVulkanInstance() , "vkGetDeviceProcAddr"));
     vkGetPhysicalDeviceSurfaceCapabilitiesKHR = reinterpret_cast<PFN_vkGetPhysicalDeviceSurfaceCapabilitiesKHR>(vkGetInstanceProcAddr(VulkanComponentFactory::getInstance().getCreatedVulkanInstance() , "vkGetPhysicalDeviceSurfaceCapabilitiesKHR"));
     vkGetPhysicalDeviceSurfaceFormatsKHR = reinterpret_cast<PFN_vkGetPhysicalDeviceSurfaceFormatsKHR>(vkGetInstanceProcAddr(VulkanComponentFactory::getInstance().getCreatedVulkanInstance() , "vkGetPhysicalDeviceSurfaceFormatsKHR"));
     vkGetPhysicalDeviceSurfaceSupportKHR = reinterpret_cast<PFN_vkGetPhysicalDeviceSurfaceSupportKHR>(vkGetInstanceProcAddr(VulkanComponentFactory::getInstance().getCreatedVulkanInstance() , "vkGetPhysicalDeviceSurfaceSupportKHR"));
@@ -138,12 +140,12 @@ bool VulkanFunctionsPointersInitializer::initializeVulkanFunctionsPointer()
     initializeGlobalLevelVulkanFuncitons();
 
     VkInstance vulkanInstance = VK_NULL_HANDLE;
-    vulkanInstance = VulkanComponentFactory::getInstance().getInstance().createVulkanInstance(INSTANCE_EXTENSIONS_NAMES_WHICH_ARE_NOT_RELATED_TO_LAYERS , LAYERS_NAMES);
+    vulkanInstance = VulkanComponentFactory::getInstance().createVulkanInstance(INSTANCE_EXTENSIONS_NAMES_WHICH_ARE_NOT_RELATED_TO_LAYERS , LAYERS_NAMES);
 
     initializeInstanceLevelVulkanFuncitons();
 
     VkDevice logicalDevice = VK_NULL_HANDLE;
-    logicalDevice = VulkanComponentFactory::getInstance().getInstance().createVulkanLogicalDevice(DEVICE_EXTENSIONS_NAMES);
+    logicalDevice = VulkanComponentFactory::getInstance().createVulkanLogicalDevice(DEVICE_EXTENSIONS_NAMES);
 
     initializeDeviceLevelVulkanFuncitons();
 

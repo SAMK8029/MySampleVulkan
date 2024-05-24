@@ -28,6 +28,7 @@ public:
     VkInstance createVulkanInstance(const std::vector<const char *> &desiredExtensionsNames = std::vector<const char *>(0) , const std::vector<const char *>& desiredLayersNames = std::vector<const char *>(0));
     VkPhysicalDevice getSelectedGpu();
     VkPhysicalDevice getProperGpu();
+    bool createSwapchian(const VkSurfaceKHR * const surface);
 
     QueueFamilyIndices queueFamilyIndices;
 

@@ -16,8 +16,6 @@ private:
     PresentationEngine();
     ~PresentationEngine();
 
-    bool createSwapchian();
-
     GLFWwindow*      _window;
 };
 
