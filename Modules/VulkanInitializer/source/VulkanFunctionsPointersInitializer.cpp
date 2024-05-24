@@ -77,15 +77,15 @@ bool VulkanFunctionsPointersInitializer::initializeGlobalLevelVulkanFuncitons()
 
 bool VulkanFunctionsPointersInitializer::initializeInstanceLevelVulkanFuncitons()
 {
-    vkEnumerateDeviceExtensionProperties = reinterpret_cast<PFN_vkEnumerateDeviceExtensionProperties>(vkGetInstanceProcAddr(VulkanComponentFactory::getCreatedVulkanInstance() , "vkEnumerateDeviceExtensionProperties"));
-    vkEnumeratePhysicalDevices = reinterpret_cast<PFN_vkEnumeratePhysicalDevices>(vkGetInstanceProcAddr(VulkanComponentFactory::getCreatedVulkanInstance() , "vkEnumeratePhysicalDevices"));
-    vkCreateDevice = reinterpret_cast<PFN_vkCreateDevice>(vkGetInstanceProcAddr(VulkanComponentFactory::getCreatedVulkanInstance() , "vkCreateDevice"));
-    vkGetPhysicalDeviceQueueFamilyProperties = reinterpret_cast<PFN_vkGetPhysicalDeviceQueueFamilyProperties>(vkGetInstanceProcAddr(VulkanComponentFactory::getCreatedVulkanInstance() , "vkGetPhysicalDeviceQueueFamilyProperties"));
-    vkGetDeviceProcAddr = reinterpret_cast<PFN_vkGetDeviceProcAddr>(vkGetInstanceProcAddr(VulkanComponentFactory::getCreatedVulkanInstance() , "vkGetDeviceProcAddr"));
-    vkGetPhysicalDeviceSurfaceCapabilitiesKHR = reinterpret_cast<PFN_vkGetPhysicalDeviceSurfaceCapabilitiesKHR>(vkGetInstanceProcAddr(VulkanComponentFactory::getCreatedVulkanInstance() , "vkGetPhysicalDeviceSurfaceCapabilitiesKHR"));
-    vkGetPhysicalDeviceSurfaceFormatsKHR = reinterpret_cast<PFN_vkGetPhysicalDeviceSurfaceFormatsKHR>(vkGetInstanceProcAddr(VulkanComponentFactory::getCreatedVulkanInstance() , "vkGetPhysicalDeviceSurfaceFormatsKHR"));
-    vkGetPhysicalDeviceSurfaceSupportKHR = reinterpret_cast<PFN_vkGetPhysicalDeviceSurfaceSupportKHR>(vkGetInstanceProcAddr(VulkanComponentFactory::getCreatedVulkanInstance() , "vkGetPhysicalDeviceSurfaceSupportKHR"));
-    vkGetPhysicalDeviceSurfacePresentModesKHR = reinterpret_cast<PFN_vkGetPhysicalDeviceSurfacePresentModesKHR>(vkGetInstanceProcAddr(VulkanComponentFactory::getCreatedVulkanInstance() , "vkGetPhysicalDeviceSurfacePresentModesKHR"));
+    vkEnumerateDeviceExtensionProperties = reinterpret_cast<PFN_vkEnumerateDeviceExtensionProperties>(vkGetInstanceProcAddr(VulkanComponentFactory::getInstance().getInstance().getCreatedVulkanInstance() , "vkEnumerateDeviceExtensionProperties"));
+    vkEnumeratePhysicalDevices = reinterpret_cast<PFN_vkEnumeratePhysicalDevices>(vkGetInstanceProcAddr(VulkanComponentFactory::getInstance().getCreatedVulkanInstance() , "vkEnumeratePhysicalDevices"));
+    vkCreateDevice = reinterpret_cast<PFN_vkCreateDevice>(vkGetInstanceProcAddr(VulkanComponentFactory::getInstance().getInstance().getCreatedVulkanInstance() , "vkCreateDevice"));
+    vkGetPhysicalDeviceQueueFamilyProperties = reinterpret_cast<PFN_vkGetPhysicalDeviceQueueFamilyProperties>(vkGetInstanceProcAddr(VulkanComponentFactory::getInstance().getCreatedVulkanInstance() , "vkGetPhysicalDeviceQueueFamilyProperties"));
+    vkGetDeviceProcAddr = reinterpret_cast<PFN_vkGetDeviceProcAddr>(vkGetInstanceProcAddr(VulkanComponentFactory::getInstance().getInstance().getCreatedVulkanInstance() , "vkGetDeviceProcAddr"));
+    vkGetPhysicalDeviceSurfaceCapabilitiesKHR = reinterpret_cast<PFN_vkGetPhysicalDeviceSurfaceCapabilitiesKHR>(vkGetInstanceProcAddr(VulkanComponentFactory::getInstance().getCreatedVulkanInstance() , "vkGetPhysicalDeviceSurfaceCapabilitiesKHR"));
+    vkGetPhysicalDeviceSurfaceFormatsKHR = reinterpret_cast<PFN_vkGetPhysicalDeviceSurfaceFormatsKHR>(vkGetInstanceProcAddr(VulkanComponentFactory::getInstance().getCreatedVulkanInstance() , "vkGetPhysicalDeviceSurfaceFormatsKHR"));
+    vkGetPhysicalDeviceSurfaceSupportKHR = reinterpret_cast<PFN_vkGetPhysicalDeviceSurfaceSupportKHR>(vkGetInstanceProcAddr(VulkanComponentFactory::getInstance().getCreatedVulkanInstance() , "vkGetPhysicalDeviceSurfaceSupportKHR"));
+    vkGetPhysicalDeviceSurfacePresentModesKHR = reinterpret_cast<PFN_vkGetPhysicalDeviceSurfacePresentModesKHR>(vkGetInstanceProcAddr(VulkanComponentFactory::getInstance().getCreatedVulkanInstance() , "vkGetPhysicalDeviceSurfacePresentModesKHR"));
 
     bool result = false;
     result = checkLoadedFunction(vkEnumerateDeviceExtensionProperties , "vkEnumerateDeviceExtensionProperties" , "Instance Level");
@@ -103,7 +103,7 @@ bool VulkanFunctionsPointersInitializer::initializeInstanceLevelVulkanFuncitons(
 
 bool VulkanFunctionsPointersInitializer::initializeDeviceLevelVulkanFuncitons()
 {
-    vkCreateSwapchainKHR = reinterpret_cast<PFN_vkCreateSwapchainKHR>(vkGetDeviceProcAddr(VulkanComponentFactory::getCreatedVulkanLogicalDevice() , "vkCreateSwapchainKHR"));
+    vkCreateSwapchainKHR = reinterpret_cast<PFN_vkCreateSwapchainKHR>(vkGetDeviceProcAddr(VulkanComponentFactory::getInstance().getCreatedVulkanLogicalDevice() , "vkCreateSwapchainKHR"));
 
     bool result = false;
     result = checkLoadedFunction(vkCreateSwapchainKHR , "vkCreateSwapchainKHR" , "Device Level from extension");
@@ -138,12 +138,12 @@ bool VulkanFunctionsPointersInitializer::initializeVulkanFunctionsPointer()
     initializeGlobalLevelVulkanFuncitons();
 
     VkInstance vulkanInstance = VK_NULL_HANDLE;
-    vulkanInstance = VulkanComponentFactory::getInstance().createVulkanInstance(INSTANCE_EXTENSIONS_NAMES_WHICH_ARE_NOT_RELATED_TO_LAYERS , LAYERS_NAMES);
+    vulkanInstance = VulkanComponentFactory::getInstance().getInstance().createVulkanInstance(INSTANCE_EXTENSIONS_NAMES_WHICH_ARE_NOT_RELATED_TO_LAYERS , LAYERS_NAMES);
 
     initializeInstanceLevelVulkanFuncitons();
 
     VkDevice logicalDevice = VK_NULL_HANDLE;
-    logicalDevice = VulkanComponentFactory::getInstance().createVulkanLogicalDevice(DEVICE_EXTENSIONS_NAMES);
+    logicalDevice = VulkanComponentFactory::getInstance().getInstance().createVulkanLogicalDevice(DEVICE_EXTENSIONS_NAMES);
 
     initializeDeviceLevelVulkanFuncitons();
 

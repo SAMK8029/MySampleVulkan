@@ -6,12 +6,13 @@
 namespace RenderingEngine
 {
 
-VkInstance         VulkanComponentFactory::_vulkanInstance      = VK_NULL_HANDLE;
-VkDevice           VulkanComponentFactory::_vulkanLogicalDevice = VK_NULL_HANDLE;
-VkPhysicalDevice   VulkanComponentFactory::_selectedGpu         = VK_NULL_HANDLE;
-QueueFamilyIndices VulkanComponentFactory::queueFamilyIndices = {-1 , -1};
-
-VulkanComponentFactory::VulkanComponentFactory() = default;
+VulkanComponentFactory::VulkanComponentFactory()
+{
+    _vulkanInstance      = VK_NULL_HANDLE;
+    _vulkanLogicalDevice = VK_NULL_HANDLE;
+    _selectedGpu         = VK_NULL_HANDLE;
+    queueFamilyIndices = {-1 , -1};
+}
 
 VulkanComponentFactory::~VulkanComponentFactory() = default;
 

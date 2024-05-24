@@ -20,21 +20,21 @@ class VulkanComponentFactory
     ~VulkanComponentFactory();
 
 public:
-    static VulkanComponentFactory &getInstance();
-    static VkInstance getCreatedVulkanInstance();
-    static VkDevice   getCreatedVulkanLogicalDevice();
-    static VkPhysicalDevice getSelectedGpu();
-    static QueueFamilyIndices queueFamilyIndices;
+    static VulkanComponentFactory& getInstance();
 
-    VkInstance createVulkanInstance(const std::vector<const char *> &desiredExtensionsNames = std::vector<const char *>(0) , const std::vector<const char *>& desiredLayersNames = std::vector<const char *>(0));
-    VkPhysicalDevice getProperGpu();
+    VkDevice getCreatedVulkanLogicalDevice();
     VkDevice createVulkanLogicalDevice(const std::vector<const char *> &desiredExtensionsNames = std::vector<const char *>(0));
+    VkInstance getCreatedVulkanInstance();
+    VkInstance createVulkanInstance(const std::vector<const char *> &desiredExtensionsNames = std::vector<const char *>(0) , const std::vector<const char *>& desiredLayersNames = std::vector<const char *>(0));
+    VkPhysicalDevice getSelectedGpu();
+    VkPhysicalDevice getProperGpu();
 
+    QueueFamilyIndices queueFamilyIndices;
 
 private:
-    static VkInstance _vulkanInstance;
-    static VkDevice   _vulkanLogicalDevice;
-    static VkPhysicalDevice   _selectedGpu;
+    VkInstance       _vulkanInstance;
+    VkDevice         _vulkanLogicalDevice;
+    VkPhysicalDevice _selectedGpu;
 };
 
 } // RenderingEngine

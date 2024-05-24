@@ -28,7 +28,7 @@ PresentationEngine:: PresentationEngine()
 {
     if(!glfwInit())
     {
-        std::cerr << "Glfw In`itialization Failed ! \n\n";
+        std::cerr << "Glfw Initialization Failed ! \n\n";
         std::exit(GlfwInitializationFailed);
     }
 
@@ -52,10 +52,10 @@ bool PresentationEngine::createSwapchian()
 {
     VkSurfaceKHR surface = VK_NULL_HANDLE;
 
-    glfwCreateWindowSurface(VulkanComponentFactory::getCreatedVulkanInstance() , _window , nullptr , &surface);
+    glfwCreateWindowSurface(VulkanComponentFactory::getInstance().getCreatedVulkanInstance() , _window , nullptr , &surface);
 
     VkSurfaceCapabilitiesKHR surfaceCapabilities;
-    vkGetPhysicalDeviceSurfaceCapabilitiesKHR(VulkanComponentFactory::getSelectedGpu() , surface , &surfaceCapabilities);
+    vkGetPhysicalDeviceSurfaceCapabilitiesKHR(VulkanComponentFactory::getInstance().getSelectedGpu() , surface , &surfaceCapabilities);
 
     uint32_t desiredMinimumImage = surfaceCapabilities.minImageCount + 1;
 
@@ -65,9 +65,9 @@ bool PresentationEngine::createSwapchian()
     }
 
     uint32_t surfaceFormatCount;
-    vkGetPhysicalDeviceSurfaceFormatsKHR(VulkanComponentFactory::getSelectedGpu() , surface , &surfaceFormatCount , nullptr);
+    vkGetPhysicalDeviceSurfaceFormatsKHR(VulkanComponentFactory::getInstance().getSelectedGpu() , surface , &surfaceFormatCount , nullptr);
     std::vector<VkSurfaceFormatKHR> surfaceFormats(surfaceFormatCount);
-    vkGetPhysicalDeviceSurfaceFormatsKHR(VulkanComponentFactory::getSelectedGpu() , surface , &surfaceFormatCount , surfaceFormats.data());
+    vkGetPhysicalDeviceSurfaceFormatsKHR(VulkanComponentFactory::getInstance().getSelectedGpu() , surface , &surfaceFormatCount , surfaceFormats.data());
 
     VkSurfaceFormatKHR desiredSurfaceFormat{VkFormat::VK_FORMAT_R8G8B8A8_UNORM , VkColorSpaceKHR::VK_COLOR_SPACE_SRGB_NONLINEAR_KHR};
 
@@ -89,28 +89,28 @@ bool PresentationEngine::createSwapchian()
     }
 
     uint32_t queueFamiliesPropertiesCount;
-    vkGetPhysicalDeviceQueueFamilyProperties(VulkanComponentFactory::getSelectedGpu() , &queueFamiliesPropertiesCount , nullptr);
+    vkGetPhysicalDeviceQueueFamilyProperties(VulkanComponentFactory::getInstance().getSelectedGpu() , &queueFamiliesPropertiesCount , nullptr);
     std::vector<VkQueueFamilyProperties> queueFamiliesProperties(queueFamiliesPropertiesCount);
-    vkGetPhysicalDeviceQueueFamilyProperties(VulkanComponentFactory::getSelectedGpu() , &queueFamiliesPropertiesCount , queueFamiliesProperties.data());
+    vkGetPhysicalDeviceQueueFamilyProperties(VulkanComponentFactory::getInstance().getSelectedGpu() , &queueFamiliesPropertiesCount , queueFamiliesProperties.data());
 
 
     // TODO : Make sure that the presentation queue and graphic queue are identical if posible by checking all queue family properties.
     for(size_t i = 0 ; i < queueFamiliesProperties.size() ; i++)
     {
         VkBool32 isSupported = VK_FALSE;
-        VkResult result = vkGetPhysicalDeviceSurfaceSupportKHR(VulkanComponentFactory::getSelectedGpu() , i , surface , &isSupported);
+        VkResult result = vkGetPhysicalDeviceSurfaceSupportKHR(VulkanComponentFactory::getInstance().getSelectedGpu() , i , surface , &isSupported);
 
         if(isSupported == VK_TRUE && result == VK_SUCCESS)
         {
-            VulkanComponentFactory::queueFamilyIndices.presentationQueueFamilyIndex = i;
+            VulkanComponentFactory::getInstance().queueFamilyIndices.presentationQueueFamilyIndex = i;
             break;
         }
     }
 
     uint32_t presentationModesCount;
-    vkGetPhysicalDeviceSurfacePresentModesKHR(VulkanComponentFactory::getSelectedGpu() , surface , &presentationModesCount , nullptr);
+    vkGetPhysicalDeviceSurfacePresentModesKHR(VulkanComponentFactory::getInstance().getSelectedGpu() , surface , &presentationModesCount , nullptr);
     std::vector<VkPresentModeKHR> presentationModes(presentationModesCount);
-    vkGetPhysicalDeviceSurfacePresentModesKHR(VulkanComponentFactory::getSelectedGpu() , surface , &presentationModesCount , presentationModes.data());
+    vkGetPhysicalDeviceSurfacePresentModesKHR(VulkanComponentFactory::getInstance().getSelectedGpu() , surface , &presentationModesCount , presentationModes.data());
 
     VkPresentModeKHR desiredPresentationMode = VK_PRESENT_MODE_MAILBOX_KHR;
     {
@@ -147,7 +147,7 @@ bool PresentationEngine::createSwapchian()
     swapchainCreateInfo.compositeAlpha = VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR;
     swapchainCreateInfo.presentMode = desiredPresentationMode;
 
-    if(VulkanComponentFactory::queueFamilyIndices.presentationQueueFamilyIndex == VulkanComponentFactory::queueFamilyIndices.graphicQueueFamilyIndex)
+    if(VulkanComponentFactory::getInstance().queueFamilyIndices.presentationQueueFamilyIndex == VulkanComponentFactory::getInstance().queueFamilyIndices.graphicQueueFamilyIndex)
     {
         swapchainCreateInfo.imageSharingMode = VK_SHARING_MODE_EXCLUSIVE; // Excusive to the queue.
         swapchainCreateInfo.queueFamilyIndexCount = 0;  // ~
@@ -155,7 +155,7 @@ bool PresentationEngine::createSwapchian()
     }
     else
     {
-        uint32_t queueFamilyIndices[] = {static_cast<uint32_t>(VulkanComponentFactory::queueFamilyIndices.graphicQueueFamilyIndex) , static_cast<uint32_t>(VulkanComponentFactory::queueFamilyIndices.presentationQueueFamilyIndex)};
+        uint32_t queueFamilyIndices[] = {static_cast<uint32_t>(VulkanComponentFactory::getInstance().queueFamilyIndices.graphicQueueFamilyIndex) , static_cast<uint32_t>(VulkanComponentFactory::getInstance().queueFamilyIndices.presentationQueueFamilyIndex)};
 
         swapchainCreateInfo.imageSharingMode = VK_SHARING_MODE_CONCURRENT;
         swapchainCreateInfo.queueFamilyIndexCount = 2;
@@ -163,7 +163,7 @@ bool PresentationEngine::createSwapchian()
     }
 
     VkSwapchainKHR swapchain = VK_NULL_HANDLE;
-    vkCreateSwapchainKHR(VulkanComponentFactory::getCreatedVulkanLogicalDevice() , &swapchainCreateInfo , nullptr , &swapchain);
+    vkCreateSwapchainKHR(VulkanComponentFactory::getInstance().getCreatedVulkanLogicalDevice() , &swapchainCreateInfo , nullptr , &swapchain);
 
     return true;
 }
