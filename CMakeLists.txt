@@ -33,3 +33,4 @@ add_definitions(-DVK_NO_PROTOTYPES)
 
 add_subdirectory(Modules/PresentationEngine)
 add_subdirectory(Modules/VulkanInitializer)
+add_subdirectory(Modules/RenderingEngine)

@@ -14,7 +14,7 @@ PresentationEngine& PresentationEngine::getInstance()
     return presentationEngine;
 }
 
-void PresentationEngine::showWinodw()
+void PresentationEngine::showWindow()
 {
     VkSurfaceKHR surface = VK_NULL_HANDLE;
 

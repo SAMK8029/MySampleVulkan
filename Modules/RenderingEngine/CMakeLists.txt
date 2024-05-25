@@ -14,3 +14,5 @@ find_package(Vulkan REQUIRED)
 target_include_directories(${LIBRARY_NAME} PUBLIC ${Vulkan_INCLUDE_DIRS} include)
 
 target_link_libraries(${APPLICATION_EXE} PUBLIC ${LIBRARY_NAME})
+
+LinkToModule(${LIBRARY_NAME} VulkanInitializer)

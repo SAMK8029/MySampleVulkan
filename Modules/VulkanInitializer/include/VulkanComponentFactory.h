@@ -1,5 +1,5 @@
-#ifndef    RENDERING_ENGINE_H
-#define    RENDERING_ENGINE_H
+#ifndef    VULKAN_INITIALIZER
+#define    VULKAN_INITIALIZER
 
 #include <vulkan/vulkan.h>
 #include <vector>
@@ -28,7 +28,8 @@ public:
     VkInstance createVulkanInstance(const std::vector<const char *> &desiredExtensionsNames = std::vector<const char *>(0) , const std::vector<const char *>& desiredLayersNames = std::vector<const char *>(0));
     VkPhysicalDevice getSelectedGpu();
     VkPhysicalDevice getProperGpu();
-    bool createSwapchian(const VkSurfaceKHR * const surface);
+    VkSwapchainKHR createSwapchian(const VkSurfaceKHR * const surface);
+    VkCommandPool createCommandPool();
 
     QueueFamilyIndices queueFamilyIndices;
 
@@ -40,4 +41,4 @@ private:
 
 } // RenderingEngine
 
-#endif  // RENDERING_ENGINE_H
+#endif  // VULKAN_INITIALIZER

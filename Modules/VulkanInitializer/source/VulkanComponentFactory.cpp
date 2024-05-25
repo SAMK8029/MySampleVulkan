@@ -209,7 +209,7 @@ VkInstance VulkanComponentFactory::getCreatedVulkanInstance()
     return _vulkanInstance;
 }
 
-bool VulkanComponentFactory::createSwapchian(const VkSurfaceKHR* const surface)
+VkSwapchainKHR VulkanComponentFactory::createSwapchian(const VkSurfaceKHR* const surface)
 {
     VkSurfaceCapabilitiesKHR surfaceCapabilities;
     vkGetPhysicalDeviceSurfaceCapabilitiesKHR(getSelectedGpu() , *surface , &surfaceCapabilities);
@@ -320,9 +320,23 @@ bool VulkanComponentFactory::createSwapchian(const VkSurfaceKHR* const surface)
     }
 
     VkSwapchainKHR swapchain = VK_NULL_HANDLE;
-    vkCreateSwapchainKHR(getCreatedVulkanLogicalDevice() , &swapchainCreateInfo , nullptr , &swapchain);
+    vkCreateSwapchainKHR(_vulkanLogicalDevice , &swapchainCreateInfo , nullptr , &swapchain);
 
-    return true;
+    return swapchain;
+}
+
+VkCommandPool VulkanComponentFactory::createCommandPool()
+{
+    VkCommandPoolCreateInfo CommandPoolCreateInfo{};
+    CommandPoolCreateInfo.pNext = nullptr;
+    CommandPoolCreateInfo.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
+    CommandPoolCreateInfo.flags = VK_COMMAND_POOL_CREATE_TRANSIENT_BIT;
+    CommandPoolCreateInfo.queueFamilyIndex = queueFamilyIndices.graphicQueueFamilyIndex;
+
+    VkCommandPool commandPool = VK_NULL_HANDLE;
+    vkCreateCommandPool(_vulkanLogicalDevice , &CommandPoolCreateInfo , nullptr , &commandPool);
+
+    return commandPool;
 }
 
 VkDevice VulkanComponentFactory::getCreatedVulkanLogicalDevice()

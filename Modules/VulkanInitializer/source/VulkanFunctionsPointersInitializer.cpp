@@ -52,7 +52,7 @@ PFN_vkGetPhysicalDeviceSurfacePresentModesKHR vkGetPhysicalDeviceSurfacePresentM
 
 /*******Device Level*******/
 
-
+PFN_vkCreateCommandPool vkCreateCommandPool;
 
 // From Extensions.
 PFN_vkCreateSwapchainKHR vkCreateSwapchainKHR;
@@ -106,9 +106,11 @@ bool VulkanFunctionsPointersInitializer::initializeInstanceLevelVulkanFuncitons(
 bool VulkanFunctionsPointersInitializer::initializeDeviceLevelVulkanFuncitons()
 {
     vkCreateSwapchainKHR = reinterpret_cast<PFN_vkCreateSwapchainKHR>(vkGetDeviceProcAddr(VulkanComponentFactory::getInstance().getCreatedVulkanLogicalDevice() , "vkCreateSwapchainKHR"));
+    vkCreateCommandPool = reinterpret_cast<PFN_vkCreateCommandPool>(vkGetDeviceProcAddr(VulkanComponentFactory::getInstance().getCreatedVulkanLogicalDevice() , "vkCreateCommandPool"));
 
     bool result = false;
     result = checkLoadedFunction(vkCreateSwapchainKHR , "vkCreateSwapchainKHR" , "Device Level from extension");
+    result = checkLoadedFunction(vkCreateCommandPool , "vkCreateCommandPool" , "Device Level") && result;
 
     return result;
 }

@@ -10,7 +10,7 @@ class PresentationEngine
 {
 public:
     static PresentationEngine& getInstance();
-    void showWinodw();
+    void showWindow();
 
 private:
     PresentationEngine();
