@@ -54,6 +54,7 @@ PFN_vkGetPhysicalDeviceSurfacePresentModesKHR vkGetPhysicalDeviceSurfacePresentM
 
 PFN_vkCreateCommandPool      vkCreateCommandPool;
 PFN_vkAllocateCommandBuffers vkAllocateCommandBuffers;
+PFN_vkBeginCommandBuffer     vkBeginCommandBuffer;
 
 // From Extensions.
 PFN_vkCreateSwapchainKHR vkCreateSwapchainKHR;
@@ -109,11 +110,13 @@ bool VulkanFunctionsPointersInitializer::initializeDeviceLevelVulkanFuncitons()
     vkCreateSwapchainKHR = reinterpret_cast<PFN_vkCreateSwapchainKHR>(vkGetDeviceProcAddr(VulkanComponentFactory::getInstance().getCreatedVulkanLogicalDevice() , "vkCreateSwapchainKHR"));
     vkCreateCommandPool = reinterpret_cast<PFN_vkCreateCommandPool>(vkGetDeviceProcAddr(VulkanComponentFactory::getInstance().getCreatedVulkanLogicalDevice() , "vkCreateCommandPool"));
     vkAllocateCommandBuffers = reinterpret_cast<PFN_vkAllocateCommandBuffers>(vkGetDeviceProcAddr(VulkanComponentFactory::getInstance().getCreatedVulkanLogicalDevice() , "vkAllocateCommandBuffers"));
+    vkBeginCommandBuffer = reinterpret_cast<PFN_vkBeginCommandBuffer>(vkGetDeviceProcAddr(VulkanComponentFactory::getInstance().getCreatedVulkanLogicalDevice() , "vkBeginCommandBuffer"));
 
     bool result = false;
     result = checkLoadedFunction(vkCreateSwapchainKHR , "vkCreateSwapchainKHR" , "Device Level from extension");
     result = checkLoadedFunction(vkCreateCommandPool , "vkCreateCommandPool" , "Device Level") && result;
     result = checkLoadedFunction(vkAllocateCommandBuffers , "vkAllocateCommandBuffers" , "Device Level") && result;
+    result = checkLoadedFunction(vkBeginCommandBuffer , "vkBeginCommandBuffer" , "Device Level") && result;
 
     return result;
 }

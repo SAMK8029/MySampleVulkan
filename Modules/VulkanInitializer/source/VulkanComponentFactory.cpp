@@ -356,7 +356,20 @@ std::vector<VkCommandBuffer> VulkanComponentFactory::allocateCommandBuffer()
 
     vkAllocateCommandBuffers(_vulkanLogicalDevice , &commandBufferAllocateInfo ,  commandBuffers.data());
 
+    _commandBuffers = commandBuffers;
+
     return commandBuffers;
+}
+
+bool VulkanComponentFactory::beginCommandBufferRecording()
+{
+    VkCommandBufferBeginInfo commandBufferBeginInfo{};
+    commandBufferBeginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
+    commandBufferBeginInfo.pNext = nullptr;
+    commandBufferBeginInfo.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
+    commandBufferBeginInfo.pInheritanceInfo = nullptr;
+
+    return vkBeginCommandBuffer(_commandBuffers.at(0) , &commandBufferBeginInfo) == VK_SUCCESS ? true : false;
 }
 
 VkDevice VulkanComponentFactory::getCreatedVulkanLogicalDevice()

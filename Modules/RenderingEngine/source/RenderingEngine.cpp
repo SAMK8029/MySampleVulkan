@@ -21,6 +21,7 @@ void Render::draw()
 
     vulkanComponentFactory.createCommandPool();
     vulkanComponentFactory.allocateCommandBuffer();
+    vulkanComponentFactory.beginCommandBufferRecording();
 }
 
 } // RenderingEngine

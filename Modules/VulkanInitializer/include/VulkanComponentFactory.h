@@ -30,6 +30,7 @@ public:
     VkSwapchainKHR createSwapchian(const VkSurfaceKHR * const surface);
     VkCommandPool createCommandPool();
     std::vector<VkCommandBuffer> allocateCommandBuffer();
+    bool beginCommandBufferRecording();
 
     QueueFamilyIndices queueFamilyIndices;
 
@@ -38,6 +39,7 @@ private:
     VkDevice         _vulkanLogicalDevice;
     VkPhysicalDevice _selectedGpu;
     VkCommandPool    _commandPool;
+    std::vector<VkCommandBuffer> _commandBuffers;
 };
 
 } // RenderingEngine
