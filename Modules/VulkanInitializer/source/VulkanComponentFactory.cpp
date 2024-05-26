@@ -330,7 +330,7 @@ VkCommandPool VulkanComponentFactory::createCommandPool()
     VkCommandPoolCreateInfo CommandPoolCreateInfo{};
     CommandPoolCreateInfo.pNext = nullptr;
     CommandPoolCreateInfo.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
-    CommandPoolCreateInfo.flags = VK_COMMAND_POOL_CREATE_TRANSIENT_BIT;
+    CommandPoolCreateInfo.flags = VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
     CommandPoolCreateInfo.queueFamilyIndex = queueFamilyIndices.graphicQueueFamilyIndex;
 
     VkCommandPool commandPool = VK_NULL_HANDLE;
