@@ -7,17 +7,16 @@
 namespace RenderingEngine
 {
 
-struct QueueFamilyIndices
-{
-    int graphicQueueFamilyIndex;
-    int presentationQueueFamilyIndex;
-};
-
-
 class VulkanComponentFactory
 {
     VulkanComponentFactory();
     ~VulkanComponentFactory();
+
+    struct QueueFamilyIndices
+    {
+        int graphicQueueFamilyIndex;
+        int presentationQueueFamilyIndex;
+    };
 
 public:
     static VulkanComponentFactory& getInstance();
@@ -30,6 +29,7 @@ public:
     VkPhysicalDevice getProperGpu();
     VkSwapchainKHR createSwapchian(const VkSurfaceKHR * const surface);
     VkCommandPool createCommandPool();
+    std::vector<VkCommandBuffer> allocateCommandBuffer();
 
     QueueFamilyIndices queueFamilyIndices;
 
@@ -37,6 +37,7 @@ private:
     VkInstance       _vulkanInstance;
     VkDevice         _vulkanLogicalDevice;
     VkPhysicalDevice _selectedGpu;
+    VkCommandPool    _commandPool;
 };
 
 } // RenderingEngine

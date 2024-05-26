@@ -336,7 +336,27 @@ VkCommandPool VulkanComponentFactory::createCommandPool()
     VkCommandPool commandPool = VK_NULL_HANDLE;
     vkCreateCommandPool(_vulkanLogicalDevice , &CommandPoolCreateInfo , nullptr , &commandPool);
 
+    _commandPool = commandPool;
+
     return commandPool;
+}
+
+std::vector<VkCommandBuffer> VulkanComponentFactory::allocateCommandBuffer()
+{
+    uint32_t count = 10;
+
+    VkCommandBufferAllocateInfo commandBufferAllocateInfo{};
+    commandBufferAllocateInfo.commandPool = _commandPool;
+    commandBufferAllocateInfo.pNext = nullptr;
+    commandBufferAllocateInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
+    commandBufferAllocateInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
+    commandBufferAllocateInfo.commandBufferCount = count;
+
+    std::vector<VkCommandBuffer> commandBuffers(count);
+
+    vkAllocateCommandBuffers(_vulkanLogicalDevice , &commandBufferAllocateInfo ,  commandBuffers.data());
+
+    return commandBuffers;
 }
 
 VkDevice VulkanComponentFactory::getCreatedVulkanLogicalDevice()

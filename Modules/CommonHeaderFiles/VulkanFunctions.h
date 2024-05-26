@@ -28,6 +28,7 @@ extern PFN_vkGetPhysicalDeviceSurfacePresentModesKHR vkGetPhysicalDeviceSurfaceP
 /**************Device Level**************/
 
 extern PFN_vkCreateCommandPool  vkCreateCommandPool;
+extern PFN_vkAllocateCommandBuffers vkAllocateCommandBuffers;
 
 // From Extensions
 extern PFN_vkCreateSwapchainKHR vkCreateSwapchainKHR;

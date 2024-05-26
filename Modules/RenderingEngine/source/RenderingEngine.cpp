@@ -17,7 +17,10 @@ Render& Render::getInstance()
 
 void Render::draw()
 {
-    VulkanComponentFactory::getInstance().createCommandPool();
+    VulkanComponentFactory& vulkanComponentFactory = VulkanComponentFactory::getInstance();
+
+    vulkanComponentFactory.createCommandPool();
+    vulkanComponentFactory.allocateCommandBuffer();
 }
 
 } // RenderingEngine
