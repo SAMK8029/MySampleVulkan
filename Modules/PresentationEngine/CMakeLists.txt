@@ -12,9 +12,14 @@ add_library(${LIBRARY_NAME} STATIC ${HEADERS} ${SOURCES})
 find_package(Vulkan)
 
 target_include_directories(${LIBRARY_NAME} PUBLIC ${Vulkan_INCLUDE_DIRS} include)
+target_link_libraries(${APPLICATION_EXE} PUBLIC ${LIBRARY_NAME})
+
 target_include_directories(${LIBRARY_NAME} PUBLIC ${CMAKE_SOURCE_DIR}/Dependency/GLFW/include)
 
-target_link_libraries(${APPLICATION_EXE} PUBLIC ${LIBRARY_NAME})
-target_link_libraries(${LIBRARY_NAME} PUBLIC ${CMAKE_SOURCE_DIR}/Dependency/GLFW/lib/libglfw3.a)
+if(WIN32)
+    target_link_libraries(${LIBRARY_NAME} PUBLIC ${CMAKE_SOURCE_DIR}/Dependency/GLFW/lib/Windows/libglfw3.a)
+elseif(UNIX)
+    target_link_libraries(${LIBRARY_NAME} PUBLIC ${CMAKE_SOURCE_DIR}/Dependency/GLFW/lib/Linux/libglfw3.a)
+endif()
 
 LinkToModule(${LIBRARY_NAME} VulkanInitializer)

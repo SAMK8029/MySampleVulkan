@@ -36,7 +36,7 @@ private:
 #ifdef WIN32
     HMODULE vulkanLoader = nullptr;
 #elif defined Unix
-    static void* vulkanLoader = nullptr;
+    void* vulkanLoader = nullptr;
 #endif
 
 };
