@@ -16,4 +16,6 @@ int main()
     PresentationEngine& presentationEngine = PresentationEngine::getInstance();
 
     presentationEngine.showWindow();
+
+    return 0;
 }
