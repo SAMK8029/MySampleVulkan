@@ -245,6 +245,8 @@ VkSwapchainKHR VulkanComponentFactory::createSwapchian(const VkSurfaceKHR* const
         }
     }
 
+    _desiredSurfaceFormat = desiredSurfaceFormat;
+
     uint32_t queueFamiliesPropertiesCount;
     vkGetPhysicalDeviceQueueFamilyProperties(getSelectedGpu() , &queueFamiliesPropertiesCount , nullptr);
     std::vector<VkQueueFamilyProperties> queueFamiliesProperties(queueFamiliesPropertiesCount);
@@ -372,7 +374,12 @@ bool VulkanComponentFactory::beginCommandBufferRecording()
     return vkBeginCommandBuffer(_commandBuffers.at(0) , &commandBufferBeginInfo) == VK_SUCCESS ? true : false;
 }
 
-VkDevice VulkanComponentFactory::getCreatedVulkanLogicalDevice()
+VkSurfaceFormatKHR VulkanComponentFactory::getDesiredSurfaceFormat() const
+{
+    return _desiredSurfaceFormat;
+}
+
+VkDevice VulkanComponentFactory::getCreatedVulkanLogicalDevice() const
 {
     return _vulkanLogicalDevice;
 }

@@ -30,9 +30,11 @@ extern PFN_vkGetPhysicalDeviceSurfacePresentModesKHR vkGetPhysicalDeviceSurfaceP
 extern PFN_vkCreateCommandPool      vkCreateCommandPool;
 extern PFN_vkAllocateCommandBuffers vkAllocateCommandBuffers;
 extern PFN_vkBeginCommandBuffer     vkBeginCommandBuffer;
+extern PFN_vkCreateImageView        vkCreateImageView;
 
 // From Extensions
-extern PFN_vkCreateSwapchainKHR vkCreateSwapchainKHR;
+extern PFN_vkCreateSwapchainKHR    vkCreateSwapchainKHR;
+extern PFN_vkGetSwapchainImagesKHR vkGetSwapchainImagesKHR;
 
 /*******************************************************/
 

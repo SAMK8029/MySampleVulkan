@@ -14,7 +14,7 @@ int main()
     render.draw();
 
     PresentationEngine& presentationEngine = PresentationEngine::getInstance();
-
+    presentationEngine.init();
     presentationEngine.showWindow();
 
     return 0;

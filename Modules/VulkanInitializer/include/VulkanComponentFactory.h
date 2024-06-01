@@ -21,7 +21,7 @@ class VulkanComponentFactory
 public:
     static VulkanComponentFactory& getInstance();
 
-    VkDevice getCreatedVulkanLogicalDevice();
+    VkDevice getCreatedVulkanLogicalDevice() const;
     VkDevice createVulkanLogicalDevice(const std::vector<const char *> &desiredExtensionsNames = std::vector<const char *>(0));
     VkInstance getCreatedVulkanInstance();
     VkInstance createVulkanInstance(const std::vector<const char *> &desiredExtensionsNames = std::vector<const char *>(0) , const std::vector<const char *>& desiredLayersNames = std::vector<const char *>(0));
@@ -34,12 +34,15 @@ public:
 
     QueueFamilyIndices queueFamilyIndices;
 
+    VkSurfaceFormatKHR getDesiredSurfaceFormat() const;
+
 private:
     VkInstance       _vulkanInstance;
     VkDevice         _vulkanLogicalDevice;
     VkPhysicalDevice _selectedGpu;
     VkCommandPool    _commandPool;
     std::vector<VkCommandBuffer> _commandBuffers;
+    VkSurfaceFormatKHR _desiredSurfaceFormat;
 };
 
 } // RenderingEngine
