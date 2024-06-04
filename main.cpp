@@ -10,11 +10,12 @@ int main()
 
     vulkanFunctionsPointersInitializer.initializeVulkanFunctionsPointer();
 
-    Render& render = Render::getInstance();
-    render.draw();
-
     PresentationEngine& presentationEngine = PresentationEngine::getInstance();
     presentationEngine.init();
+
+    Renderer& renderer = Renderer::getInstance();
+    renderer.draw();
+
     presentationEngine.showWindow();
 
     return 0;

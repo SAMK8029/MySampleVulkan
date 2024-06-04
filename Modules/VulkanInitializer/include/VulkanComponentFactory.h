@@ -36,6 +36,10 @@ public:
 
     VkSurfaceFormatKHR getDesiredSurfaceFormat() const;
 
+    VkSurfaceCapabilitiesKHR getSurfaceCapabilities() const;
+
+    VkSwapchainKHR getSwapchain() const;
+
 private:
     VkInstance                   _vulkanInstance;
     VkDevice                     _vulkanLogicalDevice;
@@ -43,6 +47,8 @@ private:
     VkCommandPool                _commandPool;
     std::vector<VkCommandBuffer> _commandBuffers;
     VkSurfaceFormatKHR           _desiredSurfaceFormat;
+    VkSurfaceCapabilitiesKHR     _surfaceCapabilities;
+    VkSwapchainKHR               _swapchain;
 };
 
 } // RenderingEngine

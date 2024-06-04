@@ -15,4 +15,9 @@ target_include_directories(${LIBRARY_NAME} PUBLIC ${Vulkan_INCLUDE_DIRS} include
 
 target_link_libraries(${APPLICATION_EXE} PUBLIC ${LIBRARY_NAME})
 
+file(GLOB SHADERS ${CMAKE_CURRENT_SOURCE_DIR}/Shaders/*.spv)
+file(MAKE_DIRECTORY SHADERS ${CMAKE_BINARY_DIR}/Shaders/)
+file(COPY ${SHADERS} DESTINATION ${CMAKE_BINARY_DIR}/Shaders)
+
 LinkToModule(${LIBRARY_NAME} VulkanInitializer)
+LinkToModule(${LIBRARY_NAME} PresentationEngine)

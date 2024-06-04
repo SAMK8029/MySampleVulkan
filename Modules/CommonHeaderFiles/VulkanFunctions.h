@@ -27,14 +27,30 @@ extern PFN_vkGetPhysicalDeviceSurfacePresentModesKHR vkGetPhysicalDeviceSurfaceP
 
 /**************Device Level**************/
 
-extern PFN_vkCreateCommandPool      vkCreateCommandPool;
-extern PFN_vkAllocateCommandBuffers vkAllocateCommandBuffers;
-extern PFN_vkBeginCommandBuffer     vkBeginCommandBuffer;
-extern PFN_vkCreateImageView        vkCreateImageView;
+extern PFN_vkCreateCommandPool       vkCreateCommandPool;
+extern PFN_vkAllocateCommandBuffers  vkAllocateCommandBuffers;
+extern PFN_vkBeginCommandBuffer      vkBeginCommandBuffer;
+extern PFN_vkCreateImageView         vkCreateImageView;
+extern PFN_vkCreateShaderModule      vkCreateShaderModule;
+extern PFN_vkCreateGraphicsPipelines vkCreateGraphicsPipelines;
+extern PFN_vkCreatePipelineLayout    vkCreatePipelineLayout;
+extern PFN_vkCreateRenderPass        vkCreateRenderPass;
+extern PFN_vkCreateFramebuffer       vkCreateFramebuffer;
+extern PFN_vkCmdBeginRenderPass      vkCmdBeginRenderPass;
+extern PFN_vkCmdBindPipeline         vkCmdBindPipeline;
+extern PFN_vkCmdSetViewport          vkCmdSetViewport;
+extern PFN_vkCmdSetScissor           vkCmdSetScissor;
+extern PFN_vkCmdDraw                 vkCmdDraw;
+extern PFN_vkCmdEndRenderPass        vkCmdEndRenderPass;
+extern PFN_vkCreateSemaphore         vkCreateSemaphore;
+extern PFN_vkCreateFence             vkCreateFence;
+extern PFN_vkWaitForFences           vkWaitForFences;
+extern PFN_vkResetFences             vkResetFences;
 
 // From Extensions
 extern PFN_vkCreateSwapchainKHR    vkCreateSwapchainKHR;
 extern PFN_vkGetSwapchainImagesKHR vkGetSwapchainImagesKHR;
+extern PFN_vkAcquireNextImageKHR   vkAcquireNextImageKHR;
 
 /*******************************************************/
 

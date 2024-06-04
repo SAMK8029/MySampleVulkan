@@ -52,14 +52,30 @@ PFN_vkGetPhysicalDeviceSurfacePresentModesKHR vkGetPhysicalDeviceSurfacePresentM
 
 /*******Device Level*******/
 
-PFN_vkCreateCommandPool      vkCreateCommandPool;
-PFN_vkAllocateCommandBuffers vkAllocateCommandBuffers;
-PFN_vkBeginCommandBuffer     vkBeginCommandBuffer;
-PFN_vkGetSwapchainImagesKHR  vkGetSwapchainImagesKHR;
-PFN_vkCreateImageView        vkCreateImageView;
+PFN_vkCreateCommandPool       vkCreateCommandPool;
+PFN_vkAllocateCommandBuffers  vkAllocateCommandBuffers;
+PFN_vkBeginCommandBuffer      vkBeginCommandBuffer;
+PFN_vkCreateImageView         vkCreateImageView;
+PFN_vkCreateShaderModule      vkCreateShaderModule;
+PFN_vkCreateGraphicsPipelines vkCreateGraphicsPipelines;
+PFN_vkCreatePipelineLayout    vkCreatePipelineLayout;
+PFN_vkCreateRenderPass        vkCreateRenderPass;
+PFN_vkCreateFramebuffer       vkCreateFramebuffer;
+PFN_vkCmdBeginRenderPass      vkCmdBeginRenderPass;
+PFN_vkCmdBindPipeline         vkCmdBindPipeline;
+PFN_vkCmdSetViewport          vkCmdSetViewport;
+PFN_vkCmdSetScissor           vkCmdSetScissor;
+PFN_vkCmdDraw                 vkCmdDraw;
+PFN_vkCmdEndRenderPass        vkCmdEndRenderPass;
+PFN_vkCreateSemaphore         vkCreateSemaphore;
+PFN_vkCreateFence             vkCreateFence;
+PFN_vkWaitForFences           vkWaitForFences;
+PFN_vkResetFences             vkResetFences;
 
 // From Extensions.
-PFN_vkCreateSwapchainKHR vkCreateSwapchainKHR;
+PFN_vkCreateSwapchainKHR    vkCreateSwapchainKHR;
+PFN_vkGetSwapchainImagesKHR vkGetSwapchainImagesKHR;
+PFN_vkAcquireNextImageKHR   vkAcquireNextImageKHR;
 
 /**************************/
 
@@ -115,6 +131,22 @@ bool VulkanFunctionsPointersInitializer::initializeDeviceLevelVulkanFuncitons()
     vkBeginCommandBuffer = reinterpret_cast<PFN_vkBeginCommandBuffer>(vkGetDeviceProcAddr(VulkanComponentFactory::getInstance().getCreatedVulkanLogicalDevice() , "vkBeginCommandBuffer"));
     vkGetSwapchainImagesKHR = reinterpret_cast<PFN_vkGetSwapchainImagesKHR>(vkGetDeviceProcAddr(VulkanComponentFactory::getInstance().getCreatedVulkanLogicalDevice() , "vkGetSwapchainImagesKHR"));
     vkCreateImageView = reinterpret_cast<PFN_vkCreateImageView>(vkGetDeviceProcAddr(VulkanComponentFactory::getInstance().getCreatedVulkanLogicalDevice() , "vkCreateImageView"));
+    vkCreateShaderModule = reinterpret_cast<PFN_vkCreateShaderModule>(vkGetDeviceProcAddr(VulkanComponentFactory::getInstance().getCreatedVulkanLogicalDevice() , "vkCreateShaderModule"));
+    vkCreateGraphicsPipelines = reinterpret_cast<PFN_vkCreateGraphicsPipelines>(vkGetDeviceProcAddr(VulkanComponentFactory::getInstance().getCreatedVulkanLogicalDevice() , "vkCreateGraphicsPipelines"));
+    vkCreatePipelineLayout = reinterpret_cast<PFN_vkCreatePipelineLayout>(vkGetDeviceProcAddr(VulkanComponentFactory::getInstance().getCreatedVulkanLogicalDevice() , "vkCreatePipelineLayout"));
+    vkCreateRenderPass = reinterpret_cast<PFN_vkCreateRenderPass>(vkGetDeviceProcAddr(VulkanComponentFactory::getInstance().getCreatedVulkanLogicalDevice() , "vkCreateRenderPass"));
+    vkCreateFramebuffer = reinterpret_cast<PFN_vkCreateFramebuffer>(vkGetDeviceProcAddr(VulkanComponentFactory::getInstance().getCreatedVulkanLogicalDevice() , "vkCreateFramebuffer"));
+    vkCmdBeginRenderPass = reinterpret_cast<PFN_vkCmdBeginRenderPass>(vkGetDeviceProcAddr(VulkanComponentFactory::getInstance().getCreatedVulkanLogicalDevice() , "vkCmdBeginRenderPass"));
+    vkCmdBindPipeline = reinterpret_cast<PFN_vkCmdBindPipeline>(vkGetDeviceProcAddr(VulkanComponentFactory::getInstance().getCreatedVulkanLogicalDevice() , "vkCmdBindPipeline"));
+    vkCmdSetViewport = reinterpret_cast<PFN_vkCmdSetViewport>(vkGetDeviceProcAddr(VulkanComponentFactory::getInstance().getCreatedVulkanLogicalDevice() , "vkCmdSetViewport"));
+    vkCmdSetScissor = reinterpret_cast<PFN_vkCmdSetScissor>(vkGetDeviceProcAddr(VulkanComponentFactory::getInstance().getCreatedVulkanLogicalDevice() , "vkCmdSetScissor"));
+    vkCmdDraw = reinterpret_cast<PFN_vkCmdDraw>(vkGetDeviceProcAddr(VulkanComponentFactory::getInstance().getCreatedVulkanLogicalDevice() , "vkCmdDraw"));
+    vkCmdEndRenderPass = reinterpret_cast<PFN_vkCmdEndRenderPass>(vkGetDeviceProcAddr(VulkanComponentFactory::getInstance().getCreatedVulkanLogicalDevice() , "vkCmdEndRenderPass"));
+    vkCreateSemaphore = reinterpret_cast<PFN_vkCreateSemaphore>(vkGetDeviceProcAddr(VulkanComponentFactory::getInstance().getCreatedVulkanLogicalDevice() , "vkCreateSemaphore"));
+    vkCreateFence = reinterpret_cast<PFN_vkCreateFence>(vkGetDeviceProcAddr(VulkanComponentFactory::getInstance().getCreatedVulkanLogicalDevice() , "vkCreateFence"));
+    vkWaitForFences = reinterpret_cast<PFN_vkWaitForFences>(vkGetDeviceProcAddr(VulkanComponentFactory::getInstance().getCreatedVulkanLogicalDevice() , "vkWaitForFences"));
+    vkResetFences = reinterpret_cast<PFN_vkResetFences>(vkGetDeviceProcAddr(VulkanComponentFactory::getInstance().getCreatedVulkanLogicalDevice() , "vkResetFences"));
+    vkAcquireNextImageKHR = reinterpret_cast<PFN_vkAcquireNextImageKHR>(vkGetDeviceProcAddr(VulkanComponentFactory::getInstance().getCreatedVulkanLogicalDevice() , "vkAcquireNextImageKHR"));
 
     bool result = false;
     result = checkLoadedFunction(vkCreateSwapchainKHR , "vkCreateSwapchainKHR" , "Device Level from extension");
@@ -123,6 +155,22 @@ bool VulkanFunctionsPointersInitializer::initializeDeviceLevelVulkanFuncitons()
     result = checkLoadedFunction(vkBeginCommandBuffer , "vkBeginCommandBuffer" , "Device Level") && result;
     result = checkLoadedFunction(vkGetSwapchainImagesKHR , "vkGetSwapchainImagesKHR" , "Device Level from extension") && result;
     result = checkLoadedFunction(vkCreateImageView , "vkCreateImageView" , "Device Level") && result;
+    result = checkLoadedFunction(vkCreateShaderModule , "vkCreateShaderModule" , "Device Level") && result;
+    result = checkLoadedFunction(vkCreateGraphicsPipelines , "vkCreateGraphicsPipelines" , "Device Level") && result;
+    result = checkLoadedFunction(vkCreatePipelineLayout , "vkCreatePipelineLayout" , "Device Level") && result;
+    result = checkLoadedFunction(vkCreateRenderPass , "vkCreateRenderPass" , "Device Level") && result;
+    result = checkLoadedFunction(vkCreateFramebuffer , "vkCreateFramebuffer" , "Device Level") && result;
+    result = checkLoadedFunction(vkCmdBeginRenderPass , "vkCmdBeginRenderPass" , "Device Level") && result;
+    result = checkLoadedFunction(vkCmdBindPipeline , "vkCmdBindPipeline" , "Device Level") && result;
+    result = checkLoadedFunction(vkCmdSetViewport , "vkCmdSetViewport" , "Device Level") && result;
+    result = checkLoadedFunction(vkCmdSetScissor , "vkCmdSetScissor" , "Device Level") && result;
+    result = checkLoadedFunction(vkCmdDraw , "vkCmdDraw" , "Device Level") && result;
+    result = checkLoadedFunction(vkCmdEndRenderPass , "vkCmdEndRenderPass" , "Device Level") && result;
+    result = checkLoadedFunction(vkCreateSemaphore , "vkCreateSemaphore" , "Device Level") && result;
+    result = checkLoadedFunction(vkCreateFence , "vkCreateFence" , "Device Level") && result;
+    result = checkLoadedFunction(vkWaitForFences , "vkWaitForFences" , "Device Level") && result;
+    result = checkLoadedFunction(vkResetFences , "vkResetFences" , "Device Level") && result;
+    result = checkLoadedFunction(vkAcquireNextImageKHR , "vkAcquireNextImageKHR" , "Device Level from extension") && result;
 
     return result;
 }
@@ -189,7 +237,7 @@ bool VulkanFunctionsPointersInitializer::checkLoadedFunction(T functionPointer ,
 {
     if(functionPointer == nullptr)
     {
-        std::cerr << number << " - Could not load " << functionName << " ! function. Function level : " << functionLevel << "\n\n";
+        std::cout << number << " - Could not load " << functionName << " ! function. Function level : " << functionLevel << "\n\n";
 
         ++number;
 

@@ -289,6 +289,8 @@ VkSwapchainKHR VulkanComponentFactory::createSwapchian(const VkSurfaceKHR* const
         }
     }
 
+    _surfaceCapabilities = surfaceCapabilities;
+
     VkSwapchainCreateInfoKHR swapchainCreateInfo{};
     swapchainCreateInfo.sType = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR;
     swapchainCreateInfo.compositeAlpha = VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR;
@@ -324,6 +326,8 @@ VkSwapchainKHR VulkanComponentFactory::createSwapchian(const VkSurfaceKHR* const
     VkSwapchainKHR swapchain = VK_NULL_HANDLE;
     vkCreateSwapchainKHR(_vulkanLogicalDevice , &swapchainCreateInfo , nullptr , &swapchain);
 
+    _swapchain = swapchain;
+
     return swapchain;
 }
 
@@ -345,7 +349,7 @@ VkCommandPool VulkanComponentFactory::createCommandPool()
 
 std::vector<VkCommandBuffer> VulkanComponentFactory::allocateCommandBuffer()
 {
-    uint32_t count = 10;
+    uint32_t count = 1;
 
     VkCommandBufferAllocateInfo commandBufferAllocateInfo{};
     commandBufferAllocateInfo.commandPool = _commandPool;
@@ -368,7 +372,7 @@ bool VulkanComponentFactory::beginCommandBufferRecording()
     VkCommandBufferBeginInfo commandBufferBeginInfo{};
     commandBufferBeginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
     commandBufferBeginInfo.pNext = nullptr;
-    commandBufferBeginInfo.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
+    commandBufferBeginInfo.flags = 0;
     commandBufferBeginInfo.pInheritanceInfo = nullptr;
 
     return vkBeginCommandBuffer(_commandBuffers.at(0) , &commandBufferBeginInfo) == VK_SUCCESS ? true : false;
@@ -377,6 +381,16 @@ bool VulkanComponentFactory::beginCommandBufferRecording()
 VkSurfaceFormatKHR VulkanComponentFactory::getDesiredSurfaceFormat() const
 {
     return _desiredSurfaceFormat;
+}
+
+VkSurfaceCapabilitiesKHR VulkanComponentFactory::getSurfaceCapabilities() const
+{
+    return _surfaceCapabilities;
+}
+
+VkSwapchainKHR VulkanComponentFactory::getSwapchain() const
+{
+    return _swapchain;
 }
 
 VkDevice VulkanComponentFactory::getCreatedVulkanLogicalDevice() const

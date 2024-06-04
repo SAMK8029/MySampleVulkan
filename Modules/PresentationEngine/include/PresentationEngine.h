@@ -15,6 +15,8 @@ public:
     void showWindow();
     void init();
 
+    std::vector<VkImageView> getImageViews() const;
+
 private:
     PresentationEngine();
     ~PresentationEngine();

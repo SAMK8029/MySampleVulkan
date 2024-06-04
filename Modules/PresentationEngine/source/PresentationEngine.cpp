@@ -97,6 +97,11 @@ void PresentationEngine::createImageViews(std::vector<VkImageView>* imageViews)
     }
 }
 
+std::vector<VkImageView> PresentationEngine::getImageViews() const
+{
+    return _imageViews;
+}
+
 PresentationEngine::~PresentationEngine() = default;
 
 } // RenderingEngine
