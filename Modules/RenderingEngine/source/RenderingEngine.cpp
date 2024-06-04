@@ -33,23 +33,16 @@ Renderer& Renderer::getInstance()
     return renderingEngine;
 }
 
-void Renderer::draw()
+void RenderingEngine::Renderer::recordCommandBuufer(VkRenderPass renderPass , uint32_t imageIndex)
 {
     VulkanComponentFactory& vulkanComponentFactory = VulkanComponentFactory::getInstance();
 
-
-    VkRenderPass renderPass = createRenderPass();
-    createGraphicsPipelines(renderPass);
-    createFrameBuffer(renderPass);
-
-    vulkanComponentFactory.createCommandPool();
-    std::vector<VkCommandBuffer> CommandBuffers =  vulkanComponentFactory.allocateCommandBuffer();
     vulkanComponentFactory.beginCommandBufferRecording();
 
     VkRenderPassBeginInfo renderPassBeginInfo{};
     renderPassBeginInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO;
     renderPassBeginInfo.renderPass = renderPass;
-    renderPassBeginInfo.framebuffer = _framebuffers[0]; // ****************************
+    renderPassBeginInfo.framebuffer = _framebuffers[imageIndex];
     renderPassBeginInfo.renderArea.offset = {0, 0};
     renderPassBeginInfo.renderArea.extent = vulkanComponentFactory.getSurfaceCapabilities().currentExtent;
 
@@ -57,8 +50,8 @@ void Renderer::draw()
     renderPassBeginInfo.clearValueCount = 1;
     renderPassBeginInfo.pClearValues = &clearColor;
 
-    vkCmdBeginRenderPass(CommandBuffers.at(0) , &renderPassBeginInfo , VK_SUBPASS_CONTENTS_INLINE);
-    vkCmdBindPipeline(CommandBuffers.at(0) , VK_PIPELINE_BIND_POINT_GRAPHICS , _graphicsPipeline);
+    vkCmdBeginRenderPass(_commandBuffers.at(0) , &renderPassBeginInfo , VK_SUBPASS_CONTENTS_INLINE);
+    vkCmdBindPipeline(_commandBuffers.at(0) , VK_PIPELINE_BIND_POINT_GRAPHICS , _graphicsPipeline);
 
     VkViewport viewport{};
     viewport.x = 0.0f;
@@ -67,38 +60,34 @@ void Renderer::draw()
     viewport.height = static_cast<float>(vulkanComponentFactory.getSurfaceCapabilities().currentExtent.height);
     viewport.minDepth = 0.0f;
     viewport.maxDepth = 1.0f;
-    vkCmdSetViewport(CommandBuffers.at(0), 0, 1, &viewport);
+    vkCmdSetViewport(_commandBuffers.at(0), 0, 1, &viewport);
 
     VkRect2D scissor{};
     scissor.offset = {0, 0};
     scissor.extent = vulkanComponentFactory.getSurfaceCapabilities().currentExtent;
-    vkCmdSetScissor(CommandBuffers.at(0), 0, 1, &scissor);
+    vkCmdSetScissor(_commandBuffers.at(0), 0, 1, &scissor);
 
-    vkCmdDraw(CommandBuffers.at(0), 3, 1, 0, 0);
+    vkCmdDraw(_commandBuffers.at(0), 3, 1, 0, 0);
 
-    vkCmdEndRenderPass(CommandBuffers.at(0));
+    vkCmdEndRenderPass(_commandBuffers.at(0));
 
-    VkSemaphore imageAvailableSemaphore;
-    VkSemaphore renderFinishedSemaphore;
-    VkFence inFlightFence;
+    vulkanComponentFactory.endCommandBufferRecording();
+}
 
-
-    VkSemaphoreCreateInfo semaphoreInfo{};
-    semaphoreInfo.sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO;
-    VkFenceCreateInfo fenceInfo{};
-    fenceInfo.sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO;
-    if(vkCreateSemaphore(vulkanComponentFactory.getCreatedVulkanLogicalDevice(), &semaphoreInfo, nullptr, &imageAvailableSemaphore) != VK_SUCCESS || vkCreateSemaphore(vulkanComponentFactory.getCreatedVulkanLogicalDevice(), &semaphoreInfo, nullptr, &renderFinishedSemaphore) != VK_SUCCESS || vkCreateFence(vulkanComponentFactory.getCreatedVulkanLogicalDevice(), &fenceInfo, nullptr, &inFlightFence))
-    {
-        std::exit(-1);
-    }
-
-    vkWaitForFences(vulkanComponentFactory.getCreatedVulkanLogicalDevice(), 1, &inFlightFence, VK_TRUE, UINT64_MAX);
-    vkResetFences(vulkanComponentFactory.getCreatedVulkanLogicalDevice(), 1, &inFlightFence);
-
-    uint32_t imageIndex;
-    vkAcquireNextImageKHR(vulkanComponentFactory.getCreatedVulkanLogicalDevice(), vulkanComponentFactory.getSwapchain() , UINT64_MAX, imageAvailableSemaphore, VK_NULL_HANDLE, &imageIndex);
+void Renderer::init()
+{
+    VulkanComponentFactory& vulkanComponentFactory = VulkanComponentFactory::getInstance();
 
 
+    _renderPass = createRenderPass();
+
+    createGraphicsPipelines(_renderPass);
+    createFrameBuffer(_renderPass);
+
+    vulkanComponentFactory.createCommandPool();
+    _commandBuffers =  vulkanComponentFactory.allocateCommandBuffer();
+
+    createSyncObjects();
 }
 
 VkShaderModule Renderer::createShaderModule(std::vector<char> &shader)
@@ -311,6 +300,71 @@ void Renderer::createFrameBuffer(VkRenderPass renderPass)
 
         _framebuffers.push_back(framebuffer);
     }
+}
+
+void Renderer::createSyncObjects()
+{
+    VkSemaphoreCreateInfo semaphoreInfo{};
+    semaphoreInfo.sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO;
+
+    VkFenceCreateInfo fenceInfo{};
+    fenceInfo.sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO;
+    fenceInfo.flags = VK_FENCE_CREATE_SIGNALED_BIT;
+
+    if (vkCreateSemaphore(VulkanComponentFactory::getInstance().getCreatedVulkanLogicalDevice(), &semaphoreInfo, nullptr, &_imageAvailableSemaphore) != VK_SUCCESS ||
+        vkCreateSemaphore(VulkanComponentFactory::getInstance().getCreatedVulkanLogicalDevice(), &semaphoreInfo, nullptr, &_renderFinishedSemaphore) != VK_SUCCESS ||
+        vkCreateFence(VulkanComponentFactory::getInstance().getCreatedVulkanLogicalDevice(), &fenceInfo, nullptr, &_inFlightFence) != VK_SUCCESS)
+    {
+        throw std::runtime_error("failed to create synchronization objects for a frame!");
+    }
+}
+
+void Renderer::drawFrame()
+{
+    vkWaitForFences(VulkanComponentFactory::getInstance().getCreatedVulkanLogicalDevice(), 1, &_inFlightFence, VK_TRUE, UINT64_MAX);
+    vkResetFences(VulkanComponentFactory::getInstance().getCreatedVulkanLogicalDevice(), 1, &_inFlightFence);
+
+    uint32_t imageIndex;
+    vkAcquireNextImageKHR(VulkanComponentFactory::getInstance().getCreatedVulkanLogicalDevice(), VulkanComponentFactory::getInstance().getSwapchain(), UINT64_MAX, _imageAvailableSemaphore, VK_NULL_HANDLE, &imageIndex);
+
+    vkResetCommandBuffer(_commandBuffers.at(0), 0);
+    recordCommandBuufer(_renderPass, imageIndex);
+
+    VkSubmitInfo submitInfo{};
+    submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
+
+    VkSemaphore waitSemaphores[] = {_imageAvailableSemaphore};
+    VkPipelineStageFlags waitStages[] = {VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT};
+    submitInfo.waitSemaphoreCount = 1;
+    submitInfo.pWaitSemaphores = waitSemaphores;
+    submitInfo.pWaitDstStageMask = waitStages;
+
+    submitInfo.commandBufferCount = 1;
+    submitInfo.pCommandBuffers = _commandBuffers.data();
+
+    VkSemaphore signalSemaphores[] = {_renderFinishedSemaphore};
+    submitInfo.signalSemaphoreCount = 1;
+    submitInfo.pSignalSemaphores = signalSemaphores;
+
+    VkQueue graphicQueue = VulkanComponentFactory::getInstance().getDeviceQueue(VulkanComponentFactory::getInstance().queueFamilyIndices.graphicQueueFamilyIndex);
+
+    vkQueueSubmit(graphicQueue , 1, &submitInfo, _inFlightFence);
+
+    VkPresentInfoKHR presentInfo{};
+    presentInfo.sType = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
+
+    presentInfo.waitSemaphoreCount = 1;
+    presentInfo.pWaitSemaphores = signalSemaphores;
+
+    VkSwapchainKHR swapChains[] = {VulkanComponentFactory::getInstance().getSwapchain()};
+    presentInfo.swapchainCount = 1;
+    presentInfo.pSwapchains = swapChains;
+
+    presentInfo.pImageIndices = &imageIndex;
+
+    VkQueue presentQueue = VulkanComponentFactory::getInstance().getDeviceQueue(VulkanComponentFactory::getInstance().queueFamilyIndices.presentationQueueFamilyIndex);
+
+    vkQueuePresentKHR(presentQueue, &presentInfo);
 }
 
 } // RenderingEngine

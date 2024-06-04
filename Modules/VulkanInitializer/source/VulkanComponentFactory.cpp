@@ -117,6 +117,14 @@ VkInstance VulkanComponentFactory::createVulkanInstance(const std::vector<const 
     return vulkanInstance;
 }
 
+VkQueue VulkanComponentFactory::getDeviceQueue(uint32_t queueFamilyIndex)
+{
+    VkQueue queue = VK_NULL_HANDLE;
+    vkGetDeviceQueue(_vulkanLogicalDevice, queueFamilyIndex, 0, &queue);
+
+    return queue;
+}
+
 VkPhysicalDevice VulkanComponentFactory::getProperGpu()
 {
     // TODO : select the proper gpu not the first one.
@@ -376,6 +384,11 @@ bool VulkanComponentFactory::beginCommandBufferRecording()
     commandBufferBeginInfo.pInheritanceInfo = nullptr;
 
     return vkBeginCommandBuffer(_commandBuffers.at(0) , &commandBufferBeginInfo) == VK_SUCCESS ? true : false;
+}
+
+void VulkanComponentFactory::endCommandBufferRecording()
+{
+    vkEndCommandBuffer(_commandBuffers.at(0));
 }
 
 VkSurfaceFormatKHR VulkanComponentFactory::getDesiredSurfaceFormat() const

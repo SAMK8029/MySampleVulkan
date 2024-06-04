@@ -16,18 +16,26 @@ private:
 
 public:
     static Renderer& getInstance();
-    void draw();
+    void init();
+    void drawFrame();
 
 private:
     VkShaderModule createShaderModule(std::vector<char>& shader);
     VkRenderPass createRenderPass();
+    void recordCommandBuufer(VkRenderPass renderPass, uint32_t imageIndex);
     void createGraphicsPipelines(const VkRenderPass renderPass);
     void createFrameBuffer(VkRenderPass renderPass);
+    void createSyncObjects();
 
     std::vector<char> _fragmentShader;
     std::vector<char> _vertexShader;
     std::vector<VkFramebuffer> _framebuffers;
-    VkPipeline _graphicsPipeline = VK_NULL_HANDLE;
+    VkPipeline  _graphicsPipeline = VK_NULL_HANDLE;
+    VkSemaphore _imageAvailableSemaphore;
+    VkSemaphore _renderFinishedSemaphore;
+    VkFence     _inFlightFence;
+    std::vector<VkCommandBuffer> _commandBuffers;
+    VkRenderPass _renderPass = VK_NULL_HANDLE;
 };
 
 } // RenderingEngine

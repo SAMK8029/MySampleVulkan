@@ -3,6 +3,7 @@
 #include <VulkanFunctions.h>
 #include <ErrorCodes.h>
 #include <iostream>
+#include <RenderingEngine.h>
 
 namespace RenderingEngine
 {
@@ -19,6 +20,8 @@ void PresentationEngine::showWindow()
     while(!glfwWindowShouldClose(_window))
     {
         glfwPollEvents();
+
+        Renderer::getInstance().drawFrame();
     }
 }
 
@@ -102,6 +105,12 @@ std::vector<VkImageView> PresentationEngine::getImageViews() const
     return _imageViews;
 }
 
-PresentationEngine::~PresentationEngine() = default;
+PresentationEngine::~PresentationEngine()
+{
+    for(const auto& imageView : _imageViews)
+    {
+        vkDestroyImageView(VulkanComponentFactory::getInstance().getCreatedVulkanLogicalDevice() , imageView , nullptr);
+    }
+}
 
 } // RenderingEngine

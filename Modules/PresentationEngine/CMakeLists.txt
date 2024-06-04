@@ -23,3 +23,4 @@ elseif(UNIX)
 endif()
 
 LinkToModule(${LIBRARY_NAME} VulkanInitializer)
+LinkToModule(${LIBRARY_NAME} RenderingEngine)

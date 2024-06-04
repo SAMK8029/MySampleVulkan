@@ -71,11 +71,17 @@ PFN_vkCreateSemaphore         vkCreateSemaphore;
 PFN_vkCreateFence             vkCreateFence;
 PFN_vkWaitForFences           vkWaitForFences;
 PFN_vkResetFences             vkResetFences;
+PFN_vkResetCommandBuffer      vkResetCommandBuffer;
+PFN_vkQueueSubmit             vkQueueSubmit;
+PFN_vkGetDeviceQueue          vkGetDeviceQueue;
+PFN_vkEndCommandBuffer        vkEndCommandBuffer;
+PFN_vkDestroyImageView        vkDestroyImageView;
 
 // From Extensions.
 PFN_vkCreateSwapchainKHR    vkCreateSwapchainKHR;
 PFN_vkGetSwapchainImagesKHR vkGetSwapchainImagesKHR;
 PFN_vkAcquireNextImageKHR   vkAcquireNextImageKHR;
+PFN_vkQueuePresentKHR          vkQueuePresentKHR;
 
 /**************************/
 
@@ -147,6 +153,12 @@ bool VulkanFunctionsPointersInitializer::initializeDeviceLevelVulkanFuncitons()
     vkWaitForFences = reinterpret_cast<PFN_vkWaitForFences>(vkGetDeviceProcAddr(VulkanComponentFactory::getInstance().getCreatedVulkanLogicalDevice() , "vkWaitForFences"));
     vkResetFences = reinterpret_cast<PFN_vkResetFences>(vkGetDeviceProcAddr(VulkanComponentFactory::getInstance().getCreatedVulkanLogicalDevice() , "vkResetFences"));
     vkAcquireNextImageKHR = reinterpret_cast<PFN_vkAcquireNextImageKHR>(vkGetDeviceProcAddr(VulkanComponentFactory::getInstance().getCreatedVulkanLogicalDevice() , "vkAcquireNextImageKHR"));
+    vkResetCommandBuffer = reinterpret_cast<PFN_vkResetCommandBuffer>(vkGetDeviceProcAddr(VulkanComponentFactory::getInstance().getCreatedVulkanLogicalDevice() , "vkResetCommandBuffer"));
+    vkQueueSubmit = reinterpret_cast<PFN_vkQueueSubmit>(vkGetDeviceProcAddr(VulkanComponentFactory::getInstance().getCreatedVulkanLogicalDevice() , "vkQueueSubmit"));
+    vkGetDeviceQueue = reinterpret_cast<PFN_vkGetDeviceQueue>(vkGetDeviceProcAddr(VulkanComponentFactory::getInstance().getCreatedVulkanLogicalDevice() , "vkGetDeviceQueue"));
+    vkQueuePresentKHR = reinterpret_cast<PFN_vkQueuePresentKHR>(vkGetDeviceProcAddr(VulkanComponentFactory::getInstance().getCreatedVulkanLogicalDevice() , "vkQueuePresentKHR"));
+    vkEndCommandBuffer = reinterpret_cast<PFN_vkEndCommandBuffer>(vkGetDeviceProcAddr(VulkanComponentFactory::getInstance().getCreatedVulkanLogicalDevice() , "vkEndCommandBuffer"));
+    vkDestroyImageView = reinterpret_cast<PFN_vkDestroyImageView>(vkGetDeviceProcAddr(VulkanComponentFactory::getInstance().getCreatedVulkanLogicalDevice() , "PFN_vkDestroyImageView"));
 
     bool result = false;
     result = checkLoadedFunction(vkCreateSwapchainKHR , "vkCreateSwapchainKHR" , "Device Level from extension");
@@ -171,6 +183,12 @@ bool VulkanFunctionsPointersInitializer::initializeDeviceLevelVulkanFuncitons()
     result = checkLoadedFunction(vkWaitForFences , "vkWaitForFences" , "Device Level") && result;
     result = checkLoadedFunction(vkResetFences , "vkResetFences" , "Device Level") && result;
     result = checkLoadedFunction(vkAcquireNextImageKHR , "vkAcquireNextImageKHR" , "Device Level from extension") && result;
+    result = checkLoadedFunction(vkResetCommandBuffer , "vkResetCommandBuffer" , "Device Level") && result;
+    result = checkLoadedFunction(vkQueueSubmit , "vkQueueSubmit" , "Device Level") && result;
+    result = checkLoadedFunction(vkGetDeviceQueue , "vkGetDeviceQueue" , "Device Level") && result;
+    result = checkLoadedFunction(vkQueuePresentKHR , "vkQueuePresentKHR" , "Device Level from extension") && result;
+    result = checkLoadedFunction(vkEndCommandBuffer , "vkEndCommandBuffer" , "Device Level") && result;
+    result = checkLoadedFunction(vkDestroyImageView , "vkDestroyImageView" , "Device Level") && result;
 
     return result;
 }

@@ -25,12 +25,14 @@ public:
     VkCommandPool createCommandPool();
     VkPhysicalDevice getSelectedGpu();
     bool beginCommandBufferRecording();
+    void endCommandBufferRecording();
     VkInstance getCreatedVulkanInstance();
     VkDevice getCreatedVulkanLogicalDevice() const;
     std::vector<VkCommandBuffer> allocateCommandBuffer();
     VkSwapchainKHR createSwapchian(const VkSurfaceKHR * const surface);
     VkDevice createVulkanLogicalDevice(const std::vector<const char *> &desiredExtensionsNames = std::vector<const char *>(0));
     VkInstance createVulkanInstance(const std::vector<const char *> &desiredExtensionsNames = std::vector<const char *>(0) , const std::vector<const char *>& desiredLayersNames = std::vector<const char *>(0));
+    VkQueue getDeviceQueue(uint32_t queueFamilyIndex);
 
     QueueFamilyIndices queueFamilyIndices;
 

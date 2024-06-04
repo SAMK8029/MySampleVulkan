@@ -46,11 +46,17 @@ extern PFN_vkCreateSemaphore         vkCreateSemaphore;
 extern PFN_vkCreateFence             vkCreateFence;
 extern PFN_vkWaitForFences           vkWaitForFences;
 extern PFN_vkResetFences             vkResetFences;
+extern PFN_vkResetCommandBuffer      vkResetCommandBuffer;
+extern PFN_vkQueueSubmit             vkQueueSubmit;
+extern PFN_vkGetDeviceQueue          vkGetDeviceQueue;
+extern PFN_vkEndCommandBuffer        vkEndCommandBuffer;
+extern PFN_vkDestroyImageView        vkDestroyImageView;
 
 // From Extensions
 extern PFN_vkCreateSwapchainKHR    vkCreateSwapchainKHR;
 extern PFN_vkGetSwapchainImagesKHR vkGetSwapchainImagesKHR;
 extern PFN_vkAcquireNextImageKHR   vkAcquireNextImageKHR;
+extern PFN_vkQueuePresentKHR       vkQueuePresentKHR;
 
 /*******************************************************/
 
